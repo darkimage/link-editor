@@ -1,0 +1,6 @@
+<div *ngIf="!editMode; else edit" >
+  {{item.name}}
+</div>
+<ng-template #edit>
+  editing
+</ng-template>

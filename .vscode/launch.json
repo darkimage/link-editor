@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Electron Main",
+            "program": "${workspaceFolder}/main.ts",
+            "outFiles": [
+                "${workspaceRoot}/main.js",
+            ],
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "windows": {
+                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "args": ["--serve"],
+            "runtimeArgs": [
+                ".",
+            ],
+            "outputCapture": "std",
+            "preLaunchTask": "npm: electron:serve-tsc",
+        },
+        {
+            "name": "Electron: Renderer",
+            "type": "chrome",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "windows": {
+                  "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "runtimeArgs": [
+                ".",
+                "--remote-debugging-port=9222"
+            ],
+            "sourceMapPathOverrides": {
+                "webpack:\\*": "${workspaceRoot}/*"
+            },
+            "sourceMaps": true,
+            "timeout": 30000,
+            "preLaunchTask": "npm: build:dev",
+            "webRoot": "${workspaceRoot}"
+         }
+    ]
+}

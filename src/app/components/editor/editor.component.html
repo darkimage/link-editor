@@ -1,0 +1,29 @@
+<mat-form-field> 
+  <input matInput placeholder="Input">
+</mat-form-field>
+
+<mat-list cdkDropList (cdkDropListDropped)="dropCat($event)">
+  <div class="itemCat" *ngFor="let category of categories" cdkDrag>
+    <div class="itemCat-placeholder" *cdkDragPlaceholder></div>
+    <p><fa-icon cdkDragHandle [icon]="['fas','grip-vertical']"></fa-icon>{{category.name}}</p>
+    <mat-list
+      id="{{category.name}}" 
+      cdkDropList 
+      class="list"
+      [cdkDropListData]="category.items" 
+      [cdkDropListConnectedTo]="listIds"
+      (cdkDropListDropped)="dropItem($event)">
+      <ng-container *ngIf="category.items.length !== 0; else noItems"> 
+        <list-item 
+        (cdkDragStarted)="dragStart($event)"
+        itemSelect (selected)="selectedItem($event)" 
+        [cdkDragData]="item" *ngFor="let item of category.items" 
+        [item]="item" class="item" 
+        cdkDrag>
+          <div class="item-placeholder" *cdkDragPlaceholder></div>
+        </list-item>
+      </ng-container>
+      <ng-template #noItems><div class="no-items mat-h3">Nessun elemento nella categoria {{category.name}}</div></ng-template>
+      </mat-list>
+  </div>
+</mat-list>

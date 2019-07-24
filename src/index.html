@@ -1,14 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>AngList</title>
-  <base href="/">
+  <title>AngularElectron</title>
+  <base href="">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
-<body>
-  <app-root></app-root>
+<body class="mat-app-background mat-body">
+  <app-root>
+    <div style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    animation: fadein 2s;
+    animation-delay: 100ms;">
+      <img alt="Loading..." src="assets/spinners/spinner-light.gif"/>
+    </div>
+  </app-root>
 </body>
 </html>
