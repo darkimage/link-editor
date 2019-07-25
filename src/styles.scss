@@ -6,6 +6,7 @@
 @import '~@angular/material/theming';
 // Import scheme for editor
 @import 'app/components/editor/editor.component.scss';
+@import 'app/components/item/item.component.scss';
 
 // Include non-theme styles for core. 
 @include mat-core();
@@ -17,6 +18,7 @@ $theme: mat-light-theme($primary, $accent);
 
 // Include theme styles for Angular Material components.
 @include angular-material-theme($theme);
+@include list-item-theme($theme);
 
 // Include theme styles for your custom components.
 @include lists-theme($theme);
@@ -25,10 +27,6 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-}
-
-body{
-  margin: 0 16px;
 }
 
 // .loading-app {

@@ -1,0 +1,14 @@
+
+@import '~@angular/material/theming';
+
+@mixin list-item-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+    .selected{
+        background-color: mat-color($accent,200) !important;
+        border: 2px solid mat-color($accent,400) !important;
+    }
+}

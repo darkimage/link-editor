@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, HostListener, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, HostBinding, HostListener, ElementRef, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
 import { ItemData } from '../../classes/Item-data-class';
 
 @Component({
@@ -8,16 +8,20 @@ import { ItemData } from '../../classes/Item-data-class';
 })
 export class ItemComponent implements OnInit {
   editMode: Boolean = false;
-  isLastClicked: Boolean = false;
-  constructor(private el: ElementRef) { }
+  isSelected: Boolean = false;
+  constructor(
+    private el: ElementRef,
+    private render: Renderer2) { }
 
   @Input() item: ItemData;
-  @Output() editing: EventEmitter<ItemData>;
+  @Output() editing: EventEmitter<ItemData> = new EventEmitter<ItemData>();
+  @Output() selected: EventEmitter<ItemData> = new EventEmitter<ItemData>();
 
   @HostListener('dblclick') onDblClick() {
     this.editMode = true;
     this.editing.emit(this.item);
     // console.log(this.item);
+    this.unselect();
   }
 
   @HostListener('document:click', ['$event'])
@@ -25,28 +29,45 @@ export class ItemComponent implements OnInit {
     if (!this.el.nativeElement.contains(event.target)) {
       this.editMode = false;
       this.editing.emit(undefined);
-      this.isLastClicked = false;
+      this.unselect();
     } else {
-      this.isLastClicked = true;
+      this.select();
     }
   }
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (event.keyCode === 113) {
-      if (this.isLastClicked) {
+      if (this.isSelected) {
         if(this.editMode) {
           this.editMode = false;
           this.editing.emit(undefined);
         } else {
           this.editMode = true;
           this.editing.emit(this.item);
+          this.unselect();
         }
       }
     }
   }
 
-  setSelected() {
-    this.isLastClicked = true;
+  unselect() {
+    this.render.removeClass(this.el.nativeElement, 'selected');
+    this.isSelected = false;
+    this.selected.emit(undefined);
+    // console.log(this.el.nativeElement)
+  }
+
+  select(data?: ItemData) {
+    const select = () => {
+      this.render.addClass(this.el.nativeElement, 'selected');
+      this.isSelected = true;
+      this.selected.emit(this.item);
+    };
+    if (data === undefined) {
+      select();
+    } else if (data === this.item) {
+      select();
+    }
   }
 
   ngOnInit() {

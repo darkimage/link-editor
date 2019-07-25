@@ -1,5 +1,4 @@
 import { ItemComponent } from './../item/item.component';
-import { ItemClickDirective } from './../../directives/item-click.directive';
 import { ItemCategory } from './../../classes/item-category-class';
 import { Component, OnInit, Renderer2, QueryList, ViewChildren} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag, CdkDropList, CdkDragStart} from '@angular/cdk/drag-drop';
@@ -11,10 +10,9 @@ import { ItemData } from '../../classes/Item-data-class';
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit {
-  lastItemSelected: number = undefined;
+  lastItemSelected: ItemData = undefined;
   listIds = [];
   categories: Array<ItemCategory> = new Array<ItemCategory>();
-  @ViewChildren(ItemClickDirective) selectItems: QueryList<ItemClickDirective>;
   @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
 
   constructor(private renderer: Renderer2) {
@@ -32,6 +30,14 @@ export class EditorComponent implements OnInit {
   }
 
   dropItem(event: CdkDragDrop<Array<ItemData>>) {
+    setTimeout(() => {
+        this.itemComponents.toArray().forEach((itemcomp) => {
+          // console.log(itemcomp.item);
+          if (this.lastItemSelected === itemcomp.item) {
+            itemcomp.select(event.item.data);
+          }
+        });
+    }, 0);
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -39,30 +45,17 @@ export class EditorComponent implements OnInit {
                         event.container.data,
                         event.previousIndex,
                         event.currentIndex);
-      setTimeout(() => {
-        event.container.data.forEach((value) => {
-          if (value === event.item.data){
-            console.log(event.item);
-            this.selectItems.toArray().forEach((dir) => {
-              if (dir.isDirectiveItem(event.item)) {
-                dir.select();
-              }
-            });
-          }
-        });
-      }, 0);
-
     }
   }
 
-  dragStart(event: CdkDragStart<CdkDrag<ItemData>>) {
-    setTimeout(() => {
-      this.selectItems.forEach((dir) => {
-        if (!dir.isDirectiveItem(event.source.data)) {
-          dir.unselect();
-        }
-      });
-    }, 0);
+  dragStart(event: CdkDragStart<ItemData>) {
+    this.itemComponents.toArray().forEach((itemcomp) => {
+      if (itemcomp.isSelected && itemcomp.item === event.source.data) {
+        this.lastItemSelected = event.source.data;
+      } else {
+        itemcomp.unselect();
+      }
+    });
   }
 
   dropCat(event: CdkDragDrop<Array<ItemCategory>>) {
@@ -72,13 +65,4 @@ export class EditorComponent implements OnInit {
   getListIds() {
     return [ ...this.categories.map(_ => _.name)];
   }
-
-  selectedItem(event: ItemData) {
-    this.itemComponents.forEach((component) => {
-      if(component.item === event) {
-        component.setSelected();
-      }
-    });
-  }
-
 }

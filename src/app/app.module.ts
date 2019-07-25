@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 // NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ElectronService } from './providers/electron.service';
 
 import { WebviewDirective } from './directives/webview.directive';
@@ -31,13 +31,13 @@ import {
   MatInputModule,
   MatListModule,
   MatProgressSpinnerModule,
+  MatToolbarModule
 } from '@angular/material';
 
 import {
   DragDropModule
 } from '@angular/cdk/drag-drop';
 import { ItemComponent } from './components/item/item.component';
-import { ItemClickDirective } from './directives/item-click.directive';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -50,10 +50,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent,
     WebviewDirective,
     EditorComponent,
-    ItemComponent,
-    ItemClickDirective,
+    ItemComponent
   ],
   imports: [
+    MatToolbarModule,
+    NgScrollbarModule,
     FontAwesomeModule,
     MatProgressSpinnerModule,
     DragDropModule,
