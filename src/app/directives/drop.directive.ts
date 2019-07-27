@@ -11,7 +11,7 @@ export class DropDirective {
     private el: ElementRef,
     private render: Renderer2
   ) { }
-  
+
   @HostListener('drop', ['$event']) public ondrop(evt) {
     evt.preventDefault();
     evt.stopPropagation();
@@ -21,10 +21,10 @@ export class DropDirective {
   @HostListener('dragover', ['$event']) onDragOver(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    if(this.onHover !== ''){
+    if(this.onHover !== '') {
       this.render.addClass(this.el.nativeElement, this.onHover as string);
     }
-    if(this.onLeave !== ''){
+    if(this.onLeave !== '') {
       this.render.removeClass(this.el.nativeElement, this.onLeave as string);
     }
   }
@@ -32,10 +32,10 @@ export class DropDirective {
   @HostListener('dragleave', ['$event']) onDragLeave(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    if(this.onHover !== ''){
+    if (this.onHover !== '') {
       this.render.removeClass(this.el.nativeElement, this.onHover as string);
     }
-    if(this.onLeave !== ''){
+    if (this.onLeave !== '') {
       this.render.addClass(this.el.nativeElement, this.onLeave as string);
     }
   }
