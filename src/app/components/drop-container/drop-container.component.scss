@@ -1,0 +1,88 @@
+@import '~@angular/material/theming';
+
+:host{
+    display: block;
+    height: 100%;
+}
+
+@mixin drop-container-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+    $border-radius: 25px;
+    $border-width: 5px;
+
+    .drop-container{
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: $border-radius;
+        border-width: 5px;
+        border-color: mat-color($primary,100);
+        border-style: dotted;
+        padding: 5em 0;
+        margin-right: 16px;
+        background-color: mat-color($primary,50);
+    }
+
+    .drop-container > #text{
+        text-align: center;
+        position: relative;
+        color: mat-color($foreground, disabled-text);
+        font-weight: 700;
+        z-index: 1;
+        pointer-events: none;
+        transition: opacity 1s ease-out;
+    }
+
+    .drop-container fa-icon{
+        color: mat-color($accent, 700);
+    }
+
+    .fixed-upload-icon{
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        transition: opacity 1s ease-out;
+    }
+
+    .drop-container #upload-icon{
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        transform: translate(-50%,-50%);
+        pointer-events: none;
+    }
+
+    .drop-hover::before{
+        content: "";
+        border-color: mat-color($accent, 500);
+        border-radius: $border-radius;
+        border-width: $border-width;
+        border-style: solid;
+        position: absolute;
+        top: -$border-width;
+        left: -$border-width;
+		width: 100%;
+		height: 100%;
+        background: mat-color($accent, 500);
+        opacity: 0.3;
+    }
+
+    .drop-hover #upload-icon{
+        display: block;
+        opacity: 0.9;
+        transition: opacity 1s ease-out;
+    }
+
+    .drop-hover .fixed-upload-icon{
+        opacity: 0;
+    }
+
+    .drop-hover > #text{
+        opacity: 0;
+    }
+}

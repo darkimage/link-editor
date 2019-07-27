@@ -1,5 +1,8 @@
 import { Component, OnInit, HostBinding, HostListener, ElementRef, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
 import { ItemData } from '../../classes/Item-data-class';
+import { itemEditEvent } from './item.interfaces';
+
+export type editTrigger = 'dbclick' | 'key';
 
 @Component({
   selector: 'list-item',
@@ -10,17 +13,16 @@ export class ItemComponent implements OnInit {
   editMode: Boolean = false;
   isSelected: Boolean = false;
   constructor(
-    private el: ElementRef,
+    public el: ElementRef,
     private render: Renderer2) { }
 
   @Input() item: ItemData;
-  @Output() editing: EventEmitter<ItemData> = new EventEmitter<ItemData>();
-  @Output() selected: EventEmitter<ItemData> = new EventEmitter<ItemData>();
+  @Output() editing: EventEmitter<itemEditEvent> = new EventEmitter<itemEditEvent>();
+  @Output() selected: EventEmitter<ItemComponent> = new EventEmitter<ItemComponent>();
 
   @HostListener('dblclick') onDblClick() {
     this.editMode = true;
-    this.editing.emit(this.item);
-    // console.log(this.item);
+    this.editing.emit({component: this, action: 'dbclick'});
     this.unselect();
   }
 
@@ -28,7 +30,6 @@ export class ItemComponent implements OnInit {
   clickout(event) {
     if (!this.el.nativeElement.contains(event.target)) {
       this.editMode = false;
-      this.editing.emit(undefined);
       this.unselect();
     } else {
       this.select();
@@ -40,12 +41,13 @@ export class ItemComponent implements OnInit {
       if (this.isSelected) {
         if(this.editMode) {
           this.editMode = false;
-          this.editing.emit(undefined);
         } else {
           this.editMode = true;
-          this.editing.emit(this.item);
+          this.editing.emit({component: this, action: 'key'});
           this.unselect();
         }
+      }else if(this.editMode) {
+        this.editMode = false;
       }
     }
   }
@@ -53,7 +55,6 @@ export class ItemComponent implements OnInit {
   unselect() {
     this.render.removeClass(this.el.nativeElement, 'selected');
     this.isSelected = false;
-    this.selected.emit(undefined);
     // console.log(this.el.nativeElement)
   }
 
@@ -61,7 +62,7 @@ export class ItemComponent implements OnInit {
     const select = () => {
       this.render.addClass(this.el.nativeElement, 'selected');
       this.isSelected = true;
-      this.selected.emit(this.item);
+      this.selected.emit(this);
     };
     if (data === undefined) {
       select();

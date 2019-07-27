@@ -1,9 +1,39 @@
+
+@import '~@angular/material/theming';
+
+@mixin home-toolbar-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  .container > .second-row{
+    height: 32px;
+    background-color: mat-color($primary,100);
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 auto;
+    padding: 0 16px;
+    color: mat-color($primary, default-contrast);
+  }
+
+  .container > .second-row > * {
+    align-self: center;
+  }
+
+}
+
 .container {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.toolbar{
-  margin-bottom: 16px;
+.container > app-editor {
+  flex: 1;
+}
+
+.container > mat-toolbar{
+  z-index: 2;
 }

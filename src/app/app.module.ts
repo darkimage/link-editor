@@ -11,11 +11,10 @@ import { AppRoutingModule } from './app-routing.module';
 // NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgScrollbarModule } from 'ngx-scrollbar';
+import { NgScrollbarModule,SmoothScrollModule } from 'ngx-scrollbar';
 import { ElectronService } from './providers/electron.service';
 
 import { WebviewDirective } from './directives/webview.directive';
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import {AngularSplitModule} from 'angular-split';
@@ -23,8 +22,18 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { EditorComponent } from './components/editor/editor.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
-library.add(faGripVertical);
+import {
+  faGripVertical,
+  faFileImport,
+  faFileUpload,
+  faFileCode
+} from '@fortawesome/free-solid-svg-icons';
+library.add(
+  faGripVertical,
+  faFileImport,
+  faFileUpload,
+  faFileCode
+);
 
 import {
   MatFormFieldModule,
@@ -38,6 +47,8 @@ import {
   DragDropModule
 } from '@angular/cdk/drag-drop';
 import { ItemComponent } from './components/item/item.component';
+import { DropContainerComponent } from './components/drop-container/drop-container.component';
+import { DropDirective } from './directives/drop.directive';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -50,9 +61,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent,
     WebviewDirective,
     EditorComponent,
-    ItemComponent
+    ItemComponent,
+    DropContainerComponent,
+    DropDirective
   ],
   imports: [
+    SmoothScrollModule,
     MatToolbarModule,
     NgScrollbarModule,
     FontAwesomeModule,

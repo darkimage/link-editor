@@ -1,8 +1,11 @@
 import { ItemComponent } from './../item/item.component';
 import { ItemCategory } from './../../classes/item-category-class';
-import { Component, OnInit, Renderer2, QueryList, ViewChildren} from '@angular/core';
+import { Component, OnInit, Renderer2, QueryList, ViewChildren, ViewChild} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag, CdkDropList, CdkDragStart} from '@angular/cdk/drag-drop';
 import { ItemData } from '../../classes/Item-data-class';
+import { NgScrollbar } from 'ngx-scrollbar';
+import { itemEditEvent } from './../item/item.interfaces';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-editor',
@@ -12,19 +15,11 @@ import { ItemData } from '../../classes/Item-data-class';
 export class EditorComponent implements OnInit {
   lastItemSelected: ItemData = undefined;
   listIds = [];
-  categories: Array<ItemCategory> = new Array<ItemCategory>();
+  categories: Promise<Array<ItemCategory>>;
   @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
+  @ViewChild('scrollLeft', {static: true}) leftScroll: NgScrollbar;
 
-  constructor(private renderer: Renderer2) {
-    for (let i = 0; i < 5; i++) {
-      const cat = new ItemCategory('prova' + i);
-      this.categories.push(cat);
-      for (let j = 0; j < 3; j++) {
-        cat.items.push(new ItemData(`prova ${i}-${j}`, ''));
-      }
-    }
-    this.listIds = this.getListIds();
-  }
+  constructor() {}
 
   ngOnInit() {
   }
@@ -59,10 +54,28 @@ export class EditorComponent implements OnInit {
   }
 
   dropCat(event: CdkDragDrop<Array<ItemCategory>>) {
-    moveItemInArray(this.categories, event.previousIndex, event.currentIndex);
+    this.categories.then(res => {
+      moveItemInArray(res, event.previousIndex, event.currentIndex);
+    });
   }
 
   getListIds() {
-    return [ ...this.categories.map(_ => _.name)];
+    this.categories.then(res => {
+      this.listIds = [ ...res.map(_ => _.name)];
+    });
+  }
+
+  itemEditing(ev: itemEditEvent) {
+    if (ev.action === 'key') {
+      console.log(ev);
+      this.leftScroll.scrollYTo(ev.component.el.nativeElement.offsetTop - 32, 500).subscribe();
+    }
+  }
+
+  outputProcessed(data: Promise<Array<ItemCategory>>) {
+    this.categories = data;
+    this.categories.then(res => {
+       this.getListIds();
+    });
   }
 }
