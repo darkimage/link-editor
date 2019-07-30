@@ -1,5 +1,6 @@
+import { ElectronService } from './../../providers/electron.service';
 import { FileProcessorService } from './../../services/file-processor.service';
-import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, HostListener, Output, EventEmitter, Input } from '@angular/core';
 import { ItemCategory } from '../../classes/item-category-class';
 import { ItemData } from '../../classes/Item-data-class';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -13,10 +14,13 @@ export type inputType = 'output' | 'input';
 })
 export class DropContainerComponent implements OnInit {
   hasDropped: Boolean = false;
-  input: inputType = 'output';
+  @Input() input: inputType = 'output';
   // processedData: BehaviorSubject<Array<ItemCategory> | Array<ItemData>> = new BehaviorSubject([]);
   @Output() processedData: EventEmitter<Promise<Array<ItemCategory>> | Promise<Array<ItemData>>> = new EventEmitter();
-  constructor(private processor: FileProcessorService) { }
+  constructor(
+    private processor: FileProcessorService,
+    private electron: ElectronService
+    ) { }
 
   ngOnInit() {
   }
@@ -24,13 +28,16 @@ export class DropContainerComponent implements OnInit {
   async onFileDropped(ev: Array<any>) {
     const processOut =  new Promise<Array<ItemCategory>>((resolve) => {
       // setTimeout(() => {
-        const reader = new FileReader();
-        reader.onload = (load: ProgressEvent) => {
-          this.processor.processOutputFile(reader.result as String).then((res) => {
-            resolve(res);
-          });
-        };
-        reader.readAsText(ev[0]);
+        const data = new Array<String>();
+        console.log(ev.length);
+        for (let i = 0; i < ev.length; i++) {
+          const file = ev[i];
+          data.push(this.electron.fs.readFileSync(file.path, 'utf8'));
+        }
+        console.log(data);
+        this.processor.processOutputFile(data).then((res) => {
+          resolve(res);
+        });
       });
       // }, 1000000);
     // });

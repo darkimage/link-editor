@@ -1,6 +1,6 @@
-import { ItemCategory } from "./item-category-class";
+import { ItemCategory } from './item-category-class';
+import { InputParsingStrategy } from './input-parsing-strategy';
 
-export interface OutputParsingStrategy {
-    process(data: String): Array<ItemCategory>;
-    write(data: Array<ItemCategory>);
+export interface OutputParsingStrategy extends InputParsingStrategy {
+    write(data: Array<ItemCategory>, savePath: String);
 }

@@ -6,6 +6,7 @@ import { Directive, Input, HostListener, Output, EventEmitter, Renderer2, Elemen
 export class DropDirective {
   @Input() onHover: String = '';
   @Input() onLeave: String = '';
+  @Input() maxFiles: Number = -1;
   @Output() dropped: EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
   constructor(
     private el: ElementRef,
@@ -15,13 +16,14 @@ export class DropDirective {
   @HostListener('drop', ['$event']) public ondrop(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.dropped.emit(evt.dataTransfer.files);
+    this.dropped.emit((this.maxFiles === -1) ? evt.dataTransfer.files :  evt.dataTransfer.files[this.maxFiles as number]);
   }
 
   @HostListener('dragover', ['$event']) onDragOver(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    if(this.onHover !== '') {
+    console.log(evt);
+    if (this.onHover !== '') {
       this.render.addClass(this.el.nativeElement, this.onHover as string);
     }
     if(this.onLeave !== '') {
