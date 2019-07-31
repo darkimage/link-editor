@@ -1,11 +1,16 @@
 import { ItemComponent } from './../item/item.component';
 import { ItemCategory } from './../../classes/item-category-class';
-import { Component, OnInit, Renderer2, QueryList, ViewChildren, ViewChild} from '@angular/core';
+import { Component, OnInit, Renderer2, QueryList, ViewChildren, ViewChild, Input} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag, CdkDropList, CdkDragStart} from '@angular/cdk/drag-drop';
 import { ItemData } from '../../classes/Item-data-class';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { itemEditEvent } from './../item/item.interfaces';
-import { Observable, BehaviorSubject } from 'rxjs';
+
+export enum LayoutStyle {
+  columnLeft,
+  columnRight,
+  columnLeftRight
+}
 
 @Component({
   selector: 'app-editor',
@@ -16,12 +21,21 @@ export class EditorComponent implements OnInit {
   lastItemSelected: ItemData = undefined;
   listIds = [];
   categories: Promise<Array<ItemCategory>>;
+  PanelLeftVisible: Boolean = true;
+  PanelRightVisible: Boolean = true;
   @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
   @ViewChild('scrollLeft', {static: true}) leftScroll: NgScrollbar;
 
   constructor() {}
 
   ngOnInit() {
+  }
+
+  @Input() set layout(layout: LayoutStyle){
+    this.PanelLeftVisible = layout === LayoutStyle.columnLeft || layout === LayoutStyle.columnLeftRight;
+    this.PanelRightVisible = layout === LayoutStyle.columnRight || layout === LayoutStyle.columnLeftRight;
+    console.log(layout);
+    console.log(this.PanelLeftVisible);
   }
 
   dropItem(event: CdkDragDrop<Array<ItemData>>) {
@@ -77,5 +91,9 @@ export class EditorComponent implements OnInit {
     this.categories.then(res => {
        this.getListIds();
     });
+  }
+
+  log(ev){
+    console.log(ev);
   }
 }

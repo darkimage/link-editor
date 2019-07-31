@@ -12,3 +12,14 @@
         border: 2px solid mat-color($accent,400) !important;
     }
 }
+
+#item-preview {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+mat-chip-list{
+  margin-left: auto;
+}

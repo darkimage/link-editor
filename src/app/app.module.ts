@@ -26,13 +26,17 @@ import {
   faGripVertical,
   faFileImport,
   faFileUpload,
-  faFileCode
+  faFileCode,
+  faColumns,
+  faMinusSquare
 } from '@fortawesome/free-solid-svg-icons';
 library.add(
   faGripVertical,
   faFileImport,
   faFileUpload,
-  faFileCode
+  faFileCode,
+  faColumns,
+  faMinusSquare
 );
 
 import {
@@ -40,7 +44,10 @@ import {
   MatInputModule,
   MatListModule,
   MatProgressSpinnerModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatExpansionModule,
+  MatChipsModule,
+  MatButtonModule
 } from '@angular/material';
 
 import {
@@ -66,6 +73,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     DropDirective
   ],
   imports: [
+    MatButtonModule,
+    MatChipsModule,
+    MatExpansionModule,
     SmoothScrollModule,
     MatToolbarModule,
     NgScrollbarModule,

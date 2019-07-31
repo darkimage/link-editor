@@ -59,26 +59,13 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
         return categoriesArray;
     }
 
-    getBtnStyle(difficulty: DifficultyClass){
-        switch (difficulty) {
-            case 'Beginner':
-                return 'success';
-            case 'Intermidiate':
-                return 'warning';
-            case 'Advanced':
-                return 'danger';
-            default:
-                return 'info';
-        }
-    }
-
     write(data: ItemCategory[], savePath: String) {
         let content = `---${this.jekyllopts}---\n`;
         let links = '';
         data.forEach((cat: ItemCategory) => {
             content += `## ${cat.name}${cat.description}`;
             cat.items.forEach((item: ItemData) => {
-                content += `<a class="btn disabled btn--${this.getBtnStyle(item.difficulty)}">${item.difficulty}</a> [${item.name}][${item.link.tag}]<br> ${item.description}\n`;
+                content += `<a class="btn disabled btn--${item.difficulty.value}">${item.difficulty.class}</a> [${item.name}][${item.link.tag}]<br> ${item.description}\n`;
                 links += `[${item.link.tag}]: ${item.link.link}\n`;
             });
         });

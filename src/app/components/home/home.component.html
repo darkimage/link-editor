@@ -5,7 +5,10 @@
     </mat-toolbar-row>
   </mat-toolbar>
   <div class="second-row">
-      <span>prova</span>
+      <button class="layout-icon" mat-button (click)="cicleLayout()" >
+        <fa-icon class="layout-icon" [icon]="['fa','columns']">
+        </fa-icon>
+      </button>
   </div>
-  <app-editor></app-editor>
+  <app-editor [layout]="layout"></app-editor>
 </div>
