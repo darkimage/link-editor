@@ -1,8 +1,9 @@
+import { ParsingStrategyError } from './../../classes/output-parsing-strategy';
 import { ElectronService } from './../../providers/electron.service';
 import { FileProcessorService } from './../../services/file-processor.service';
 import { Component, OnInit, HostListener, Output, EventEmitter, Input } from '@angular/core';
 import { ItemCategory } from '../../classes/item-category-class';
-import { ItemData } from '../../classes/Item-data-class';
+import { ItemData } from '../../classes/item-data-class';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 export type inputType = 'output' | 'input';
@@ -15,7 +16,6 @@ export type inputType = 'output' | 'input';
 export class DropContainerComponent implements OnInit {
   hasDropped: Boolean = false;
   @Input() input: inputType = 'output';
-  // processedData: BehaviorSubject<Array<ItemCategory> | Array<ItemData>> = new BehaviorSubject([]);
   @Output() processedData: EventEmitter<Promise<Array<ItemCategory>> | Promise<Array<ItemData>>> = new EventEmitter();
   constructor(
     private processor: FileProcessorService,
@@ -26,7 +26,7 @@ export class DropContainerComponent implements OnInit {
   }
 
   async onFileDropped(ev: Array<any>) {
-    const processOut =  new Promise<Array<ItemCategory>>((resolve) => {
+    const processOut =  new Promise<Array<ItemCategory>>((resolve, reject) => {
       // setTimeout(() => {
         const data = new Array<String>();
         console.log(ev.length);
@@ -37,6 +37,8 @@ export class DropContainerComponent implements OnInit {
         console.log(data);
         this.processor.processOutputFile(data).then((res) => {
           resolve(res);
+        }).catch((error: ParsingStrategyError) => {
+          reject(error);
         });
       });
       // }, 1000000);
@@ -47,4 +49,9 @@ export class DropContainerComponent implements OnInit {
       this.processedData.next(processOut);
     }
   }
+
+  reset() {
+    this.hasDropped = false;
+  }
+
 }

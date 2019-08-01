@@ -7,19 +7,35 @@
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
 
+    .selected > .item{
+      background-color: mat-color($accent,200) !important;
+    }
+
     .selected{
-        background-color: mat-color($accent,200) !important;
-        border: 2px solid mat-color($accent,400) !important;
+      background-color: mat-color($accent,200) !important;
+      border: 2px solid mat-color($accent,400) !important;
     }
 }
 
-#item-preview {
+.item-header {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
 }
 
+.item{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 mat-chip-list{
   margin-left: auto;
+}
+
+.item-description{
+  padding-top: 16px;
+  width: 100%;
+  overflow: hidden;
 }

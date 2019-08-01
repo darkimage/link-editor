@@ -1,18 +1,16 @@
 <as-split unit="percent" class="container" [useTransition]="true">
   <as-split-area size="50" #area1="asSplitArea" [minSize]="30" [visible]="PanelLeftVisible" order="1">
-  <app-drop-container (processedData)="outputProcessed($event)">
-  <div class="spinner" *ngIf="!(categories | async)">
+  <app-drop-container #outDropContainer (processedData)="outputProcessed($event)" >
+  <div class="spinner" *ngIf="!(categories | async) && !(OutputProcessingError | async)?.error">
     <mat-spinner></mat-spinner>
     <div>Processing ....</div>
   </div>
-  <div class="toolbar mat-elevation-z4">
-    Collapse All <fa-icon [icon]="['fa','minus-square']"></fa-icon>
-  </div>
-  <ng-scrollbar *ngIf="(categories | async)" #scrollLeft [compact]="true" [shown]="'always'" [disableOnBreakpoints]="false">
+  <ng-container *ngIf="(categories | async)">
+    <panel-toolbar (expansion)="toggleExpansionOut($event)" (descriptions)="toggleDescriptionsOut($event)"></panel-toolbar>
   <mat-list class="container-out" cdkDropList (cdkDropListDropped)="dropCat($event)">
-    <div class="itemCat" *ngFor="let category of (categories|async)" cdkDrag>
+    <div class="itemCat" *ngFor="let category of (categories|async)" cdkDrag >
       <div class="itemCat-placeholder" *cdkDragPlaceholder></div>
-      <mat-expansion-panel>  
+      <mat-expansion-panel #OutExpansionPanel>  
         <mat-expansion-panel-header>
           <mat-panel-title>
             <fa-icon cdkDragHandle [icon]="['fas','grip-vertical']"></fa-icon>{{category.name}}
@@ -27,11 +25,13 @@
         [cdkDropListConnectedTo]="listIds"
         (cdkDropListDropped)="dropItem($event)">
         <ng-container *ngIf="category.items.length !== 0; else noItems"> 
-          <list-item 
+          <list-item
+          #OutitemComponents
           (cdkDragStarted)="dragStart($event)"
           [cdkDragData]="item" *ngFor="let item of category.items" 
           [item]="item" class="item" 
           (editing)="itemEditing($event)"
+          (editingEnd)="itemEditingEnd($event)"
           (cdkDragMoved)="log($event)"
           cdkDrag>
             <div class="item-placeholder" *cdkDragPlaceholder></div>
@@ -43,11 +43,21 @@
         </mat-expansion-panel>
     </div>
   </mat-list>
-  </ng-scrollbar>
+  </ng-container>
+  <div class="out-error" *ngIf="(OutputProcessingError | async)?.error">
+    <div class="error-container">
+      <fa-icon [icon]="['fa','exclamation-triangle']" class="fa-7x"></fa-icon>
+      {{(OutputProcessingError| async)?.message}}
+      <button mat-button class="retry-error" (click)="resetDropContainerOut()">
+        <fa-icon [icon]="['fa','redo-alt']"></fa-icon>
+        Reprocess File
+      </button>
+    </div>
+  </div>
 </app-drop-container>
 </as-split-area>
 <as-split-area class="split-area" size="70" #area2="asSplitArea" [minSize]="30" [visible]="PanelRightVisible" order="2">
-    <app-drop-container [input]="'input'" (processedData)="outputProcessed($event)">
+    <app-drop-container [input]="'input'" (processedData)="outputProcessed($event)" >
       <!-- <ng-scrollbar #scrollright [compact]="true" [shown]="'always'" [disableOnBreakpoints]="false"> -->
       <h5>Initial size: <b>70%</b></h5>
       <h5>Current size: <b> sad</b></h5>

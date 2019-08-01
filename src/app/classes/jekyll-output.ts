@@ -1,8 +1,7 @@
-import { DifficultyClass } from './item-data-class';
 import { FileProcessorService } from './../services/file-processor.service';
 import { OutputParsingStrategy } from './output-parsing-strategy';
 import { ItemCategory } from './item-category-class';
-import { ItemData, ItemLink } from './Item-data-class';
+import { ItemData, ItemLink, DifficultyClass } from './item-data-class';
 
 export class JekyllOutputStrategy implements OutputParsingStrategy {
 

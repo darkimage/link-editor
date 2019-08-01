@@ -1,0 +1,31 @@
+// Import library functions for theme creation.
+@import '~@angular/material/theming';
+@import '../../app.component.scss';
+
+@mixin panel-toolbar-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  .toolbar{
+    display: flex;
+    padding: 4px 16px 4px 0;
+    flex-direction: row;
+    align-content: center;
+    justify-content: flex-end;
+    z-index: 1;
+    width: 100%;
+    max-height: 32px;
+    overflow: hidden;
+    position: sticky;
+    background-color: mat-color($primary,200);
+    color: mat-color($primary, default-contrast);
+  }
+
+} 
+
+.toolbar *{
+    padding-left: 2px;
+    padding-right: 2px;
+}

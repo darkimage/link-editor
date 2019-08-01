@@ -17,8 +17,8 @@ import { ElectronService } from './providers/electron.service';
 import { WebviewDirective } from './directives/webview.directive';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import {AngularSplitModule} from 'angular-split';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AngularSplitModule } from 'angular-split';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditorComponent } from './components/editor/editor.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -28,7 +28,13 @@ import {
   faFileUpload,
   faFileCode,
   faColumns,
-  faMinusSquare
+  faMinusSquare,
+  faPlusSquare,
+  faAlignLeft,
+  faEye,
+  faEyeSlash,
+  faExclamationTriangle,
+  faRedoAlt
 } from '@fortawesome/free-solid-svg-icons';
 library.add(
   faGripVertical,
@@ -36,7 +42,13 @@ library.add(
   faFileUpload,
   faFileCode,
   faColumns,
-  faMinusSquare
+  faMinusSquare,
+  faPlusSquare,
+  faAlignLeft,
+  faEye,
+  faEyeSlash,
+  faExclamationTriangle,
+  faRedoAlt
 );
 
 import {
@@ -47,19 +59,36 @@ import {
   MatToolbarModule,
   MatExpansionModule,
   MatChipsModule,
-  MatButtonModule
+  MatButtonModule,
+  MatSelectModule
 } from '@angular/material';
 
-import {
-  DragDropModule
-} from '@angular/cdk/drag-drop';
+import { DragDropModule} from '@angular/cdk/drag-drop';
 import { ItemComponent } from './components/item/item.component';
 import { DropContainerComponent } from './components/drop-container/drop-container.component';
 import { DropDirective } from './directives/drop.directive';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+import { MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { ItemEditorComponent } from './components/item-editor/item-editor.component';
+
+// function that returns `MarkedOptions` with renderer override
+export function markedOptionsFactory(): MarkedOptions {
+  const renderer = new MarkedRenderer();
+
+  renderer.link = (href: string, title: string, text: string) => {
+    return `<a href="${href}" tittle="${title}" target="_blank">${text}</a>`;
+  };
+
+  return {
+    renderer: renderer
+  };
 }
 
 @NgModule({
@@ -70,9 +99,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     EditorComponent,
     ItemComponent,
     DropContainerComponent,
-    DropDirective
+    DropDirective,
+    ToolbarComponent,
+    ItemEditorComponent
   ],
   imports: [
+    MatSelectModule,
     MatButtonModule,
     MatChipsModule,
     MatExpansionModule,
@@ -91,6 +123,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AppRoutingModule,
     AngularSplitModule.forRoot(),
+    MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MarkedOptions,
+        useFactory: markedOptionsFactory,
+      }
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

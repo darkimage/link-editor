@@ -5,7 +5,7 @@ export enum DifficultyClass {
     NotClassified = 'NotClassified'
 };
 
-interface Difficulty {
+export interface Difficulty {
     class: DifficultyClass;
     value: String;
 }

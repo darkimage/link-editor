@@ -1,0 +1,18 @@
+<div class="toolbar" #toolbar>
+  <button mat-button class="small-button" (click)="toggleDescriptions()">
+    <ng-container *ngIf="descriptionAll === 'hide'; else hide">
+      Show descriptions <fa-icon [icon]="['fa','eye']"></fa-icon>
+    </ng-container>
+    <ng-template #hide>
+      Hide descriptions <fa-icon [icon]="['fa','eye-slash']"></fa-icon>
+    </ng-template>
+  </button>
+  <button mat-button class="small-button" (click)="toggleExpansion()">
+    <ng-container *ngIf="expansionAll === 'expanded'; else expand">
+      Collapse all <fa-icon [icon]="['fa','minus-square']"></fa-icon>
+    </ng-container>
+    <ng-template #expand>
+      Expand all <fa-icon [icon]="['fa','plus-square']"></fa-icon>
+    </ng-template>
+  </button>
+</div>

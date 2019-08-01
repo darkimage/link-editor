@@ -1,11 +1,16 @@
-<div id="item-preview" *ngIf="!editMode; else edit" >
-    {{item.name}}
+<div class="item" *ngIf="!editMode; else edit">
+<div class="item-header">
+    <a href="{{item.link.link}}" target="_blank">{{item.name}}</a>
     <mat-chip-list>
       <mat-chip [ngStyle]="{'background-color': item.difficulty.value}">
         {{item.difficulty.class}}
       </mat-chip>
     </mat-chip-list>
 </div>
+<div *ngIf="showDescription" [@inOutAnimation] class="item-description" markdown ngPreserveWhitespaces>
+  {{item.description}}
+</div>
+</div>
 <ng-template #edit>
-  editing
+  <item-editor [item]="item" (preventClose)="preventClose($event)"></item-editor>
 </ng-template>

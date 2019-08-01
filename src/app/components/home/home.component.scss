@@ -1,5 +1,6 @@
 
 @import '~@angular/material/theming';
+@import '../../app.component.scss';
 
 @mixin home-toolbar-theme($theme) {
   $primary: map-get($theme, primary);
@@ -9,12 +10,12 @@
 
   .container > .second-row{
     height: 32px;
-    background-color: mat-color($primary,100);
+    background-color: mat-color($primary);
     z-index: 1;
     display: flex;
     flex-direction: row;
     flex: 0 0 auto;
-    padding: 0 16px;
+    // padding: 0 16px;
     color: mat-color($primary, default-contrast);
   }
   
@@ -22,6 +23,11 @@
 
 .container > .second-row > * {
   align-self: center;
+}
+
+.second-row *{
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .container {
@@ -40,8 +46,5 @@
 
 .layout-icon{
   margin-left: auto;
-  min-width: inherit;
-  line-height: inherit;
-  padding: 0 2px;
 }
 

@@ -91,6 +91,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "angular-split": "^3.0.2",
+    "ngx-markdown": "^8.1.0",
     "ngx-scrollbar": "^4.2.0"
   }
 }

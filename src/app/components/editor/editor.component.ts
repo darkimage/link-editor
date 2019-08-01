@@ -1,10 +1,15 @@
+import { ParsingStrategyError } from './../../classes/output-parsing-strategy';
 import { ItemComponent } from './../item/item.component';
 import { ItemCategory } from './../../classes/item-category-class';
 import { Component, OnInit, Renderer2, QueryList, ViewChildren, ViewChild, Input} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag, CdkDropList, CdkDragStart} from '@angular/cdk/drag-drop';
-import { ItemData } from '../../classes/Item-data-class';
+import { ItemData } from '../../classes/item-data-class';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { itemEditEvent } from './../item/item.interfaces';
+import {ExpansionState, DescriptionState} from '../toolbar/toolbar.component';
+import { MatExpansionPanel } from '@angular/material';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { DropContainerComponent } from '../drop-container/drop-container.component';
 
 export enum LayoutStyle {
   columnLeft,
@@ -23,7 +28,12 @@ export class EditorComponent implements OnInit {
   categories: Promise<Array<ItemCategory>>;
   PanelLeftVisible: Boolean = true;
   PanelRightVisible: Boolean = true;
+  OutputProcessingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined})
+  @ViewChild('outDropContainer', {static: true}) outDropContainer: DropContainerComponent;
   @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
+  @ViewChildren('OutitemComponents') OutitemComponents: QueryList<ItemComponent>;
+  @ViewChildren('OutExpansionPanel') OutExpansionPanels: QueryList<MatExpansionPanel>;
+  @ViewChildren(CdkDrag) dragItems: QueryList<CdkDrag>;
   @ViewChild('scrollLeft', {static: true}) leftScroll: NgScrollbar;
 
   constructor() {}
@@ -82,18 +92,58 @@ export class EditorComponent implements OnInit {
   itemEditing(ev: itemEditEvent) {
     if (ev.action === 'key') {
       console.log(ev);
-      this.leftScroll.scrollYTo(ev.component.el.nativeElement.offsetTop - 32, 500).subscribe();
+      ev.component.el.nativeElement.scrollIntoView({behavior: 'smooth'});
     }
+    this.dragItems.toArray().forEach((drag: CdkDrag<ItemData>) => {
+      if (drag.data === ev.component.item) {
+        drag.disabled = true;
+      }
+    });
+  }
+
+  itemEditingEnd(ev: itemEditEvent) {
+    this.dragItems.toArray().forEach((drag: CdkDrag<ItemData>) => {
+      if (drag.data === ev.component.item) {
+        drag.disabled = false;
+      }
+    });
   }
 
   outputProcessed(data: Promise<Array<ItemCategory>>) {
     this.categories = data;
     this.categories.then(res => {
        this.getListIds();
+    }).catch((reason: ParsingStrategyError) => {
+      this.OutputProcessingError.next(reason);
     });
   }
 
-  log(ev){
+  log(ev) {
     console.log(ev);
+  }
+
+  toggleExpansionOut(expansionState: ExpansionState){
+    this.OutExpansionPanels.toArray().forEach((panel: MatExpansionPanel) => {
+        if (expansionState === 'expanded') {
+          panel.open();
+        } else {
+          panel.close();
+        }
+    });
+  }
+
+  toggleDescriptionsOut(descriptionState: DescriptionState){
+    this.OutitemComponents.toArray().forEach((item: ItemComponent) => {
+        if (descriptionState === 'hide') {
+          item.showDescription = false;
+        } else {
+          item.showDescription = true;
+        }
+    });
+  }
+
+  resetDropContainerOut(){
+    this.outDropContainer.reset();
+    this.OutputProcessingError.next({message: '', error: undefined});
   }
 }

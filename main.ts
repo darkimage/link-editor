@@ -15,8 +15,8 @@ function createWindow() {
 
   // Create the browser window.
   win = new BrowserWindow({
-    x: (screensize.width-size.width)/2,
-    y: (screensize.height-size.height)/2,
+    x: (screensize.width - size.width) / 2,
+    y: (screensize.height - size.height) / 2,
     width: size.width,
     height: size.height,
     webPreferences: {
@@ -47,6 +47,11 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
+  });
+
+  win.webContents.on('new-window', function(e, url) {
+    e.preventDefault();
+    require('electron').shell.openExternal(url);
   });
 
 }

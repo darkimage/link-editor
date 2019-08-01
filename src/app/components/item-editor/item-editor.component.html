@@ -1,0 +1,11 @@
+<mat-form-field>
+  <mat-label>Difficulty</mat-label>
+  <mat-select (selectionChange)="preventCloseEditMode()" [(value)]="item.difficulty" [compareWith]="compareDifficulty">
+    <mat-option *ngFor="let diff of difficultyValues" [value]="diff">
+      {{diff.class}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <input matInput placeholder="Name" [(ngModel)]="item.name">
+</mat-form-field>
