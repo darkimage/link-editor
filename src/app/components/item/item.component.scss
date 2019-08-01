@@ -9,13 +9,25 @@
 
     .selected > .item{
       background-color: mat-color($accent,200) !important;
+      transition: background 500ms ease-out;
     }
 
     .selected{
       background-color: mat-color($accent,200) !important;
       border: 2px solid mat-color($accent,400) !important;
+      transition: background 500ms ease-out;
+    }
+
+    mat-chip{
+      color: mat-color($accent, default-contrast) !important;
+    }
+
+    .item-editor{
+      border: 2px solid mat-color($accent, 100) !important;
     }
 }
+  
+
 
 .item-header {
   display: flex;

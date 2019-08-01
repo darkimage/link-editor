@@ -9,3 +9,22 @@
 <mat-form-field>
   <input matInput placeholder="Name" [(ngModel)]="item.name">
 </mat-form-field>
+<mat-tab-group>
+  <mat-tab label="Edit description">
+    <mat-form-field class="textarea">
+      <textarea
+      (focus)="preventCloseEditMode(false)"
+      (focusout)="restoreCloseEditMode()"
+      placeholder="Description"
+      matInput
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      [(ngModel)]="item.description"></textarea>
+    </mat-form-field>
+  </mat-tab>
+  <mat-tab label="Preview">
+    <div class="preview">
+      <markdown class="preview" [data]="item.description" ></markdown>
+    </div>
+  </mat-tab>
+</mat-tab-group>

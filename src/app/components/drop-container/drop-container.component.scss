@@ -39,7 +39,7 @@
     }
 
     .drop-container fa-icon{
-        color: mat-color($accent, 700);
+        color: mat-color($accent);
     }
 
     .fixed-upload-icon{
@@ -47,6 +47,7 @@
         left: 50%;
         transform: translateX(-50%);
         transition: opacity 0.5s ease-out;
+        color: mat-color($primary)!important;
     }
 
     .drop-container #upload-icon{

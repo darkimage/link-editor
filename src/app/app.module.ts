@@ -60,7 +60,8 @@ import {
   MatExpansionModule,
   MatChipsModule,
   MatButtonModule,
-  MatSelectModule
+  MatSelectModule,
+  MatTabsModule
 } from '@angular/material';
 
 import { DragDropModule} from '@angular/cdk/drag-drop';
@@ -77,6 +78,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 import { MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { ItemEditorComponent } from './components/item-editor/item-editor.component';
+import { CategoryListComponent } from './components/category-list/category-list.component';
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
@@ -101,9 +103,11 @@ export function markedOptionsFactory(): MarkedOptions {
     DropContainerComponent,
     DropDirective,
     ToolbarComponent,
-    ItemEditorComponent
+    ItemEditorComponent,
+    CategoryListComponent
   ],
   imports: [
+    MatTabsModule,
     MatSelectModule,
     MatButtonModule,
     MatChipsModule,

@@ -25,16 +25,18 @@ export enum LayoutStyle {
 export class EditorComponent implements OnInit {
   lastItemSelected: ItemData = undefined;
   listIds = [];
-  categories: Promise<Array<ItemCategory>>;
+  outCategories: Promise<Array<ItemCategory>>;
+  inputCategories: Promise<Array<ItemCategory>>;
   PanelLeftVisible: Boolean = true;
   PanelRightVisible: Boolean = true;
-  OutputProcessingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined})
+  OutputProcessingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined});
+  InputProcessingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined});
   @ViewChild('outDropContainer', {static: true}) outDropContainer: DropContainerComponent;
+  @ViewChild('inDropContainer', {static: true}) inDropContainer: DropContainerComponent;
   @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
   @ViewChildren('OutitemComponents') OutitemComponents: QueryList<ItemComponent>;
   @ViewChildren('OutExpansionPanel') OutExpansionPanels: QueryList<MatExpansionPanel>;
   @ViewChildren(CdkDrag) dragItems: QueryList<CdkDrag>;
-  @ViewChild('scrollLeft', {static: true}) leftScroll: NgScrollbar;
 
   constructor() {}
 
@@ -78,13 +80,13 @@ export class EditorComponent implements OnInit {
   }
 
   dropCat(event: CdkDragDrop<Array<ItemCategory>>) {
-    this.categories.then(res => {
+    this.outCategories.then(res => {
       moveItemInArray(res, event.previousIndex, event.currentIndex);
     });
   }
 
   getListIds() {
-    this.categories.then(res => {
+    this.outCategories.then(res => {
       this.listIds = [ ...res.map(_ => _.name)];
     });
   }
@@ -110,12 +112,12 @@ export class EditorComponent implements OnInit {
   }
 
   outputProcessed(data: Promise<Array<ItemCategory>>) {
-    this.categories = data;
-    this.categories.then(res => {
-       this.getListIds();
-    }).catch((reason: ParsingStrategyError) => {
-      this.OutputProcessingError.next(reason);
-    });
+    this.outCategories = data;
+    // this.outCategories.then(res => {
+    //    this.getListIds();
+    // }).catch((reason: ParsingStrategyError) => {
+    //   this.OutputProcessingError.next(reason);
+    // });
   }
 
   log(ev) {
@@ -145,5 +147,9 @@ export class EditorComponent implements OnInit {
   resetDropContainerOut(){
     this.outDropContainer.reset();
     this.OutputProcessingError.next({message: '', error: undefined});
+  }
+
+  resetDropContainerIn() {
+    this.inDropContainer.reset();
   }
 }

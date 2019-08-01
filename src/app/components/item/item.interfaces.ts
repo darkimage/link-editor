@@ -1,3 +1,3 @@
-import { ItemComponent, editTrigger } from './item.component';
+import { ItemComponent, EditTrigger } from './item.component';
 
-export interface itemEditEvent {component: ItemComponent; action: editTrigger; }
+export interface itemEditEvent {component: ItemComponent; action: EditTrigger; }

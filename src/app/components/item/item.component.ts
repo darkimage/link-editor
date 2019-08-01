@@ -3,7 +3,7 @@ import { ItemData } from '../../classes/item-data-class';
 import { itemEditEvent } from './item.interfaces';
 import { trigger, transition, style, animate } from '@angular/animations';
 
-export type editTrigger = 'dbclick' | 'key' | 'focus';
+export type EditTrigger = 'dbclick' | 'key' | 'focus';
 
 @Component({
   selector: 'list-item',
@@ -43,49 +43,35 @@ export class ItemComponent implements OnInit {
   @Output() selected: EventEmitter<ItemComponent> = new EventEmitter<ItemComponent>();
 
   @HostListener('dblclick') onDblClick() {
-    this.editMode = true;
-    this.render.setStyle(this.el.nativeElement, 'cursor', 'auto');
-    this.editing.emit({component: this, action: 'dbclick'});
-    this.unselect();
+    this.enterEditMode('dbclick');
   }
 
   @HostListener('document:click', ['$event'])
   clickout(event) {
-    if (!this.el.nativeElement.contains(event.target) && this.canClose) {
-      this.editMode = false;
-      this.render.removeStyle(this.el.nativeElement, 'cursor');
-      this.editingEnd.emit({component: this, action: 'focus'});
+    if (!this.el.nativeElement.contains(event.target) && !this.editMode) {
       this.unselect();
-    } else {
-      if(!this.editMode){
-        this.select();
-      }
+    } else if (!this.el.nativeElement.contains(event.target) && this.editMode && this.canClose) {
+      this.exitEditMode('focus');
+    } else if (this.el.nativeElement.contains(event.target) && !this.editMode) {
+      this.select();
     }
   }
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (event.keyCode === 113) {
       if (this.isSelected) {
-        // if(this.editMode && this.canClose) {
-        //   this.editMode = false;
-        // } else {
-          this.editMode = true;
-          this.render.setStyle(this.el.nativeElement, 'cursor', 'auto');
-          this.editing.emit({component: this, action: 'key'});
-          this.unselect();
-        // }
-      } else if(this.editMode && this.canClose) {
-        this.editMode = false;
-        this.render.removeStyle(this.el.nativeElement, 'cursor');
-        this.editingEnd.emit({component: this, action: 'key'});
+        this.enterEditMode('key');
+      } else if (this.editMode && this.canClose) {
+        this.exitEditMode('key');
       }
+    } else if (event.keyCode === 13 && this.editMode && this.canClose){
+      this.exitEditMode('key');
     }
   }
 
   unselect() {
     this.render.removeClass(this.el.nativeElement, 'selected');
     this.isSelected = false;
-    // console.log(this.el.nativeElement)
   }
 
   select(data?: ItemData) {
@@ -104,6 +90,22 @@ export class ItemComponent implements OnInit {
   preventClose(value: Boolean) {
     this.canClose = value;
     console.log(this.canClose);
+  }
+
+  exitEditMode(action: EditTrigger) {
+    this.render.removeClass(this.el.nativeElement, 'item-editor');
+    this.editMode = false;
+    this.render.removeStyle(this.el.nativeElement, 'cursor');
+    this.editingEnd.emit({component: this, action: action});
+    this.unselect();
+  }
+
+  enterEditMode(action: EditTrigger) {
+    this.render.addClass(this.el.nativeElement, 'item-editor');
+    this.editMode = true;
+    this.render.setStyle(this.el.nativeElement, 'cursor', 'auto');
+    this.editing.emit({component: this, action: action});
+    this.unselect();
   }
 
   ngOnInit() {

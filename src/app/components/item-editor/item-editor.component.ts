@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { ItemData, DifficultyClass, Difficulty } from '../../classes/item-data-class';
-import { MatSelect } from '@angular/material';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ItemData, Difficulty } from '../../classes/item-data-class';
 
 @Component({
   selector: 'item-editor',
@@ -18,14 +17,19 @@ export class ItemEditorComponent implements OnInit {
   @Input() item: ItemData;
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  preventCloseEditMode(oneTime: Boolean = true) {
+    this.preventClose.emit(false);
+    if (oneTime) {
+      setTimeout(() => {
+        this.restoreCloseEditMode();
+      }, 0);
+    }
   }
 
-  preventCloseEditMode() {
-    this.preventClose.emit(false);
-    setTimeout(() => {
-      this.preventClose.emit(true);
-    }, 0);
+  restoreCloseEditMode() {
+    this.preventClose.emit(true);
   }
 
   compareDifficulty = (d1: Difficulty, d2: Difficulty) => d1.class === d2.class;

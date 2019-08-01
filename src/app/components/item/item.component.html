@@ -7,9 +7,10 @@
       </mat-chip>
     </mat-chip-list>
 </div>
-<div *ngIf="showDescription" [@inOutAnimation] class="item-description" markdown ngPreserveWhitespaces>
+<markdown *ngIf="showDescription" [@inOutAnimation] [data]="item.description" class="item-description"></markdown>
+<!-- <div *ngIf="showDescription" [@inOutAnimation] class="item-description" markdown ngPreserveWhitespaces>
   {{item.description}}
-</div>
+</div> -->
 </div>
 <ng-template #edit>
   <item-editor [item]="item" (preventClose)="preventClose($event)"></item-editor>
