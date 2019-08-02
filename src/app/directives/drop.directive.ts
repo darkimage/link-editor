@@ -42,4 +42,9 @@ export class DropDirective {
     }
   }
 
+  @HostListener('document:mousemove', ['$event']) onGlobalMove(evt) {
+    if (!this.el.nativeElement.contains(evt.target)) {
+      this.render.removeClass(this.el.nativeElement, this.onHover as string);
+    }
+  }
 }

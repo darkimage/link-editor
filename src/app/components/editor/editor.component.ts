@@ -1,5 +1,8 @@
+import { ChromeBookmarksInputStrategy } from './../../classes/chrome-bookmarks-input-strategy';
+import { JekyllOutputStrategy } from './../../classes/jekyll-output';
+import { FileProcessorService } from './../../services/file-processor.service';
+import { DialogStrategyConfig } from './../strategy-dialog/strategy-dialog.component';
 import { CategoryListComponent } from './../category-list/category-list.component';
-import { ParsingStrategyError } from './../../classes/output-parsing-strategy';
 import { ItemComponent } from './../item/item.component';
 import { ItemCategory } from './../../classes/item-category-class';
 import { Component, OnInit, Renderer2, QueryList, ViewChildren, ViewChild, Input} from '@angular/core';
@@ -11,6 +14,7 @@ import {ExpansionState, DescriptionState} from '../toolbar/toolbar.component';
 import { MatExpansionPanel } from '@angular/material';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { DropContainerComponent } from '../drop-container/drop-container.component';
+import { InputParsingStrategy } from '../../classes/input-parsing-strategy';
 
 export enum LayoutStyle {
   columnLeft,
@@ -26,6 +30,8 @@ export enum LayoutStyle {
 export class EditorComponent implements OnInit {
   outData: Promise<Array<ItemCategory>>;
   inData: Promise<Array<ItemCategory>>;
+  outDropConfig: DialogStrategyConfig;
+  inDropConfig: DialogStrategyConfig;
   inputIds: String[];
   outputIds: String[];
   PanelLeftVisible: Boolean = true;
@@ -37,7 +43,20 @@ export class EditorComponent implements OnInit {
   @ViewChild('inputList', {static: false}) inputList: CategoryListComponent;
   @ViewChild('outputList', {static: false}) outputList: CategoryListComponent;
 
-  constructor() {}
+  constructor(private fileService: FileProcessorService) {
+    this.outDropConfig = {
+      width: '40%',
+      strategies: new Array<InputParsingStrategy>(
+        new JekyllOutputStrategy(fileService)
+        )
+    };
+    this.inDropConfig = {
+      width: '40%',
+      strategies: new Array<InputParsingStrategy>(
+        new ChromeBookmarksInputStrategy()
+        )
+    };
+  }
 
   ngOnInit() {
   }

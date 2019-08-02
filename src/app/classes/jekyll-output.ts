@@ -2,12 +2,20 @@ import { FileProcessorService } from './../services/file-processor.service';
 import { OutputParsingStrategy } from './output-parsing-strategy';
 import { ItemCategory } from './item-category-class';
 import { ItemData, ItemLink, DifficultyClass } from './item-data-class';
+import { Inject } from '@angular/core';
 
 export class JekyllOutputStrategy implements OutputParsingStrategy {
 
     jekyllopts: String;
-
     constructor(private fileservice: FileProcessorService) {}
+
+    getName(): String {
+        return 'Jekyll page file';
+    }
+
+    getDescription(): String{
+        return 'Parse a Jekyll markdown page file';
+    }
 
     process(files: Array<String>): Array<ItemCategory> {
         const categoriesArray = new Array<ItemCategory>();

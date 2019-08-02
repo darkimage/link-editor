@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { ItemCategory } from '../../classes/item-category-class';
 import { BehaviorSubject } from 'rxjs';
-import { ParsingStrategyError } from '../../classes/output-parsing-strategy';
 import {  } from 'electron';
 import { ExpansionState, DescriptionState } from '../toolbar/toolbar.component';
 import { MatExpansionPanel } from '@angular/material';
@@ -9,6 +8,7 @@ import { ItemComponent } from '../item/item.component';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragStart, CdkDrag } from '@angular/cdk/drag-drop';
 import { ItemData } from '../../classes/item-data-class';
 import { itemEditEvent } from '../item/item.interfaces';
+import { ParsingStrategyError } from '../../classes/input-parsing-strategy';
 
 @Component({
   selector: 'category-list',

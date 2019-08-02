@@ -1,0 +1,15 @@
+<h2>Select a parsing strategy:</h2>
+<mat-form-field>
+  <mat-label>strategy</mat-label>
+  <mat-select [(value)]="strategy" [compareWith]="compareStrategies">
+    <mat-option *ngFor="let strat of data.strategies" [value]="strat">
+     {{strat.getName()}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<div class="description">
+    {{strategy.getDescription()}}
+</div>
+<button mat-raised-button color="accent" (click)="confirm()">
+  Parse
+</button>

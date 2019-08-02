@@ -1,6 +1,10 @@
 <as-split unit="percent" class="container" [useTransition]="true">
   <as-split-area size="50" #area1="asSplitArea" [minSize]="30" [visible]="PanelLeftVisible" order="1">
-  <app-drop-container #outDropContainer (processedData)="outputProcessed($event)" >
+  <app-drop-container 
+  #outDropContainer 
+  (processedData)="outputProcessed($event)" 
+  [config]="{text: 'DROP OUTPUT FILE HERE'}" 
+  [dialogConfig]="outDropConfig">
     <category-list
     #outputList
     (reset)="resetDropContainerOut()"
@@ -9,7 +13,11 @@
   </app-drop-container>
 </as-split-area>
 <as-split-area class="split-area" size="70" #area2="asSplitArea" [minSize]="30" [visible]="PanelRightVisible" order="2">
-  <app-drop-container #inDropContainer [input]="'output'" (processedData)="inputProcessed($event)" >
+  <app-drop-container 
+  #inDropContainer 
+  (processedData)="inputProcessed($event)" 
+  [config]="{text: 'DROP INPUT FILE HERE'}" 
+  [dialogConfig]="inDropConfig">
     <category-list
     #inputList
     (reset)="resetDropContainerIn()"

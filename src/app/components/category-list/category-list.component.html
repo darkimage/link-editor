@@ -33,7 +33,6 @@
         (cdkDropListDropped)="dropItem($event)">
         <ng-container *ngIf="category.items.length !== 0; else noItems"> 
           <list-item
-          #OutitemComponents
           (cdkDragStarted)="dragStart($event)"
           [cdkDragData]="item" *ngFor="let item of category.items" 
           [item]="item" class="item" 

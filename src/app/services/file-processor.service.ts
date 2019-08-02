@@ -1,16 +1,25 @@
+import { ElectronService } from './../providers/electron.service';
 import { ItemCategory } from './../classes/item-category-class';
-import { JekyllOutputStrategy } from './../classes/jekyll-output';
 import { Injectable } from '@angular/core';
-import { OutputParsingStrategy, ParsingStrategyError } from '../classes/output-parsing-strategy';
+import { InputParsingStrategy, ParsingStrategyError } from '../classes/input-parsing-strategy';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileProcessorService {
 
-  constructor() { }
+  constructor(private electron: ElectronService) { }
 
-  processOutputFile(data: Array<String>, strategy: OutputParsingStrategy = new JekyllOutputStrategy(this)): Promise<Array<ItemCategory>> {
+  getDataFromfiles(files) {
+    const data = new Array<String>();
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      data.push(this.electron.fs.readFileSync(file.path, 'utf8'));
+    }
+    return data;
+  }
+
+  processFile(data: Array<String>, strategy: InputParsingStrategy): Promise<Array<ItemCategory>> {
     try {
       const res = strategy.process(data);
       return Promise.resolve(res);

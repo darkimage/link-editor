@@ -2,16 +2,11 @@
   <ng-content></ng-content>
 </ng-container>
 <ng-template ng-template #dropContainer>
-  <div dropFile (dropped)="onFileDropped($event)" [onHover]="'drop-hover'" class="drop-container ">
+  <div dropFile #container (dropped)="onFileDropped($event)" [onHover]="'drop-hover'" class="drop-container ">
     <fa-icon id="upload-icon" [icon]="['fas','file-upload']" size="6x"></fa-icon>
-    <div id="text" *ngIf="input == 'input'" >
-      DROP INPUT FILE HERE
-    </div>
-
-    <div id="text" *ngIf="input == 'output'" >
-      DROP OUTPUT FILE HERE
+    <div id="text">
+      {{config.text}}
     </div>
     <fa-icon class="fixed-upload-icon" [icon]="['fas','file-code']" size="2x"></fa-icon>
   </div>
 </ng-template>
- 
