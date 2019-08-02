@@ -28,6 +28,7 @@ export class ItemData {
     }
 
     static getDifficulty(diff: String): Difficulty {
+        if (!diff) { return {class: DifficultyClass.NotClassified, value: ''};}
         switch (diff.toLowerCase()) {
             case 'beginner':
                 return {class: DifficultyClass.Beginner, value: '#3fa63f'};

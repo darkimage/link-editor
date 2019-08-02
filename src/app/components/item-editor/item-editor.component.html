@@ -9,6 +9,15 @@
 <mat-form-field>
   <input matInput placeholder="Name" [(ngModel)]="item.name">
 </mat-form-field>
+<mat-divider></mat-divider>
+<h4>Edit Link</h4>
+<mat-form-field>
+  <input matInput placeholder="Tag" [(ngModel)]="item.link.tag">
+</mat-form-field>
+<mat-form-field>
+    <input matInput placeholder="Link" [(ngModel)]="item.link.link">
+  </mat-form-field>
+<mat-divider></mat-divider>
 <mat-tab-group>
   <mat-tab label="Edit description">
     <mat-form-field class="textarea">

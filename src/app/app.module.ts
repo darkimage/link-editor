@@ -62,7 +62,8 @@ import {
   MatButtonModule,
   MatSelectModule,
   MatTabsModule,
-  MatDialogModule
+  MatDialogModule,
+  MatDividerModule
 } from '@angular/material';
 
 import { DragDropModule} from '@angular/cdk/drag-drop';
@@ -110,6 +111,7 @@ export function markedOptionsFactory(): MarkedOptions {
     StrategyDialogComponent
   ],
   imports: [
+    MatDividerModule,
     MatDialogModule,
     MatTabsModule,
     MatSelectModule,

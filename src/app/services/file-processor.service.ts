@@ -24,7 +24,7 @@ export class FileProcessorService {
       const res = strategy.process(data);
       return Promise.resolve(res);
     } catch (error) {
-      return Promise.reject(new ParsingStrategyError('Errors while parsing output file', error));
+      return Promise.reject(new ParsingStrategyError('Errors while parsing file', error));
     }
   }
 
