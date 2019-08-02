@@ -41,7 +41,7 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
                 links.push({tag: match.groups.tag, link: match.groups.link});
                 match = linksReg.exec(data as string);
             }
-            console.log(links);
+            // console.log(links);
 
             categoriesArray.forEach((cat: ItemCategory) => {
                 cat.items.forEach((item: ItemData) => {
@@ -52,7 +52,7 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
                     });
                 });
             });
-            console.log(categoriesArray);
+            // console.log(categoriesArray);
             this.write(categoriesArray, '');
         });
         return categoriesArray;

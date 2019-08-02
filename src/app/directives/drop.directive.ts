@@ -22,7 +22,7 @@ export class DropDirective {
   @HostListener('dragover', ['$event']) onDragOver(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    console.log(evt);
+    // console.log(evt);
     if (this.onHover !== '') {
       this.render.addClass(this.el.nativeElement, this.onHover as string);
     }

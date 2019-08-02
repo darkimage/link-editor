@@ -25,11 +25,11 @@
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
       <mat-list
-        id="{{category.name}}" 
+        [id]="category.id" 
         cdkDropList 
         class="list"
         [cdkDropListData]="category.items" 
-        [cdkDropListConnectedTo]="listIds"
+        [cdkDropListConnectedTo]="_listIds"
         (cdkDropListDropped)="dropItem($event)">
         <ng-container *ngIf="category.items.length !== 0; else noItems"> 
           <list-item
@@ -39,7 +39,7 @@
           [item]="item" class="item" 
           (editing)="itemEditing($event)"
           (editingEnd)="itemEditingEnd($event)"
-          cdkDrag>
+          cdkDrag> 
             <div class="item-placeholder" *cdkDragPlaceholder></div>
           </list-item>
         </ng-container>

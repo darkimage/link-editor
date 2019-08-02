@@ -29,12 +29,12 @@ export class DropContainerComponent implements OnInit {
     const processOut =  new Promise<Array<ItemCategory>>((resolve, reject) => {
       // setTimeout(() => {
         const data = new Array<String>();
-        console.log(ev.length);
+        // console.log(ev.length);
         for (let i = 0; i < ev.length; i++) {
           const file = ev[i];
           data.push(this.electron.fs.readFileSync(file.path, 'utf8'));
         }
-        console.log(data);
+        // console.log(data);
         this.processor.processOutputFile(data).then((res) => {
           resolve(res);
         }).catch((error: ParsingStrategyError) => {

@@ -20,6 +20,6 @@ export class FileProcessorService {
   }
 
   saveFile(savePath: String, content: any) {
-    console.log(content);
+    // console.log(content);
   }
 }

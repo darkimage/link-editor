@@ -17,7 +17,8 @@ import { itemEditEvent } from '../item/item.interfaces';
 })
 export class CategoryListComponent implements OnInit {
   //VARIABLES
-  listIds = [];
+  _listIds:Array<String> = new Array<String>();
+  ids: BehaviorSubject<Array<String>> = new BehaviorSubject<Array<String>>([]);
   categories: Promise<Array<ItemCategory>>;
   lastItemSelected: ItemData = undefined;
   processingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined});
@@ -25,19 +26,51 @@ export class CategoryListComponent implements OnInit {
   @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
   @ViewChildren(CdkDrag) dragItems: QueryList<CdkDrag>;
   //INPUTS
-  @Input() set data(cat: Promise<Array<ItemCategory>>){
+  @Input() set data(cat: Promise<Array<ItemCategory>>) {
+    if (!cat) { return; }
     this.categories = cat;
-    this.categories.then(res => {
-      this.getListIds();
+    this.categories.then((cats: Array<ItemCategory>) => {
+      cats.forEach((category: ItemCategory) => {
+        category.id = this.getUniqueId();
+      });
+      const ids = this.getListIds(cats);
+      this.ids.next(ids);
+      this.linkTo.ids.subscribe((linkids: Array<String>) => {
+        this._listIds = ids;
+        this._listIds = this._listIds.concat(linkids);
+      });
+      console.log(this.linkTo);
+      // this.idsGenerated.emit(this.ids);
    }).catch((reason: ParsingStrategyError) => {
      this.processingError.next(reason);
    });
   }
+  @Input() linkTo: CategoryListComponent;
   //OUTPUTS
   @Output() reset: EventEmitter<void> = new EventEmitter<void>();
+  @Output() idsGenerated: EventEmitter<Array<String>> = new EventEmitter<Array<String>>();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  // refresh(){
+  //   this.categories.then((cats: Array<ItemCategory>) => {
+  //     cats.forEach((category: ItemCategory) => {
+  //       category.id = this.getUniqueId();
+  //     });
+  //     this.ids = this.getListIds(cats);
+  //     this._listIds = this.ids;
+  //     this._listIds = this._listIds.concat(this.linkTo.ids);
+  //     console.log(this.linkTo.ids);
+  //     this.idsGenerated.emit(this.ids);
+  //  }).catch((reason: ParsingStrategyError) => {
+  //    this.processingError.next(reason);
+  //  });
+  // }
+
+  getUniqueId() {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
 
   dropItem(event: CdkDragDrop<Array<ItemData>>) {
@@ -59,8 +92,8 @@ export class CategoryListComponent implements OnInit {
   }
 
   dropCat(event: CdkDragDrop<Array<ItemCategory>>) {
-    this.categories.then(res => {
-      moveItemInArray(res, event.previousIndex, event.currentIndex);
+    this.categories.then((cats: Array<ItemCategory>) =>{
+      moveItemInArray(cats, event.previousIndex, event.currentIndex);
     });
   }
 
@@ -76,7 +109,7 @@ export class CategoryListComponent implements OnInit {
 
   itemEditing(ev: itemEditEvent) {
     if (ev.action === 'key') {
-      console.log(ev);
+      // console.log(ev);
       ev.component.el.nativeElement.scrollIntoView({behavior: 'smooth'});
     }
     this.dragItems.toArray().forEach((drag: CdkDrag<ItemData>) => {
@@ -94,10 +127,8 @@ export class CategoryListComponent implements OnInit {
     });
   }
 
-  getListIds() {
-    this.categories.then(res => {
-      this.listIds = [ ...res.map(_ => _.name)];
-    });
+  getListIds(cats: Array<ItemCategory>): String[] {
+      return [ ...cats.map(_ => _.id)];
   }
 
   resetDropContainerOut() {

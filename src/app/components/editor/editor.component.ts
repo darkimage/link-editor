@@ -1,3 +1,4 @@
+import { CategoryListComponent } from './../category-list/category-list.component';
 import { ParsingStrategyError } from './../../classes/output-parsing-strategy';
 import { ItemComponent } from './../item/item.component';
 import { ItemCategory } from './../../classes/item-category-class';
@@ -23,20 +24,18 @@ export enum LayoutStyle {
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit {
-  lastItemSelected: ItemData = undefined;
-  listIds = [];
-  outCategories: Promise<Array<ItemCategory>>;
-  inputCategories: Promise<Array<ItemCategory>>;
+  outData: Promise<Array<ItemCategory>>;
+  inData: Promise<Array<ItemCategory>>;
+  inputIds: String[];
+  outputIds: String[];
   PanelLeftVisible: Boolean = true;
   PanelRightVisible: Boolean = true;
-  OutputProcessingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined});
-  InputProcessingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined});
+  _inputList: CategoryListComponent;
+  _outputList: CategoryListComponent;
   @ViewChild('outDropContainer', {static: true}) outDropContainer: DropContainerComponent;
   @ViewChild('inDropContainer', {static: true}) inDropContainer: DropContainerComponent;
-  @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
-  @ViewChildren('OutitemComponents') OutitemComponents: QueryList<ItemComponent>;
-  @ViewChildren('OutExpansionPanel') OutExpansionPanels: QueryList<MatExpansionPanel>;
-  @ViewChildren(CdkDrag) dragItems: QueryList<CdkDrag>;
+  @ViewChild('inputList', {static: false}) inputList: CategoryListComponent;
+  @ViewChild('outputList', {static: false}) outputList: CategoryListComponent;
 
   constructor() {}
 
@@ -46,107 +45,28 @@ export class EditorComponent implements OnInit {
   @Input() set layout(layout: LayoutStyle){
     this.PanelLeftVisible = layout === LayoutStyle.columnLeft || layout === LayoutStyle.columnLeftRight;
     this.PanelRightVisible = layout === LayoutStyle.columnRight || layout === LayoutStyle.columnLeftRight;
-    console.log(layout);
-    console.log(this.PanelLeftVisible);
-  }
-
-  dropItem(event: CdkDragDrop<Array<ItemData>>) {
-    setTimeout(() => {
-        this.itemComponents.toArray().forEach((itemcomp) => {
-          // console.log(itemcomp.item);
-          if (this.lastItemSelected === itemcomp.item) {
-            itemcomp.select(event.item.data);
-          }
-        });
-    }, 0);
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
-  }
-
-  dragStart(event: CdkDragStart<ItemData>) {
-    this.itemComponents.toArray().forEach((itemcomp) => {
-      if (itemcomp.isSelected && itemcomp.item === event.source.data) {
-        this.lastItemSelected = event.source.data;
-      } else {
-        itemcomp.unselect();
-      }
-    });
-  }
-
-  dropCat(event: CdkDragDrop<Array<ItemCategory>>) {
-    this.outCategories.then(res => {
-      moveItemInArray(res, event.previousIndex, event.currentIndex);
-    });
-  }
-
-  getListIds() {
-    this.outCategories.then(res => {
-      this.listIds = [ ...res.map(_ => _.name)];
-    });
-  }
-
-  itemEditing(ev: itemEditEvent) {
-    if (ev.action === 'key') {
-      console.log(ev);
-      ev.component.el.nativeElement.scrollIntoView({behavior: 'smooth'});
-    }
-    this.dragItems.toArray().forEach((drag: CdkDrag<ItemData>) => {
-      if (drag.data === ev.component.item) {
-        drag.disabled = true;
-      }
-    });
-  }
-
-  itemEditingEnd(ev: itemEditEvent) {
-    this.dragItems.toArray().forEach((drag: CdkDrag<ItemData>) => {
-      if (drag.data === ev.component.item) {
-        drag.disabled = false;
-      }
-    });
+    // console.log(layout);
+    // console.log(this.PanelLeftVisible);
   }
 
   outputProcessed(data: Promise<Array<ItemCategory>>) {
-    this.outCategories = data;
-    // this.outCategories.then(res => {
-    //    this.getListIds();
-    // }).catch((reason: ParsingStrategyError) => {
-    //   this.OutputProcessingError.next(reason);
-    // });
+    this.outData = data;
+    // this._outputList = this.outputList;
+    // this.inputList.refresh();
+  }
+
+  inputProcessed(data: Promise<Array<ItemCategory>>) {
+    this.inData = data;
+    // this._inputList = this.inputList;
+    // this.outputIds = this.outputList.ids;
   }
 
   log(ev) {
     console.log(ev);
   }
 
-  toggleExpansionOut(expansionState: ExpansionState){
-    this.OutExpansionPanels.toArray().forEach((panel: MatExpansionPanel) => {
-        if (expansionState === 'expanded') {
-          panel.open();
-        } else {
-          panel.close();
-        }
-    });
-  }
-
-  toggleDescriptionsOut(descriptionState: DescriptionState){
-    this.OutitemComponents.toArray().forEach((item: ItemComponent) => {
-        if (descriptionState === 'hide') {
-          item.showDescription = false;
-        } else {
-          item.showDescription = true;
-        }
-    });
-  }
-
-  resetDropContainerOut(){
+  resetDropContainerOut() {
     this.outDropContainer.reset();
-    this.OutputProcessingError.next({message: '', error: undefined});
   }
 
   resetDropContainerIn() {
