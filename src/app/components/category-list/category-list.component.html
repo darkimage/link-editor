@@ -1,4 +1,4 @@
-<div class="spinner" *ngIf="!(categories | async) && !(processingError | async)?.error">
+<div class="spinner" *ngIf="!categories && !(processingError | async)?.error">
     <mat-spinner></mat-spinner>
     <div>Processing ....</div>
 </div>
@@ -12,18 +12,31 @@
     </button>
   </div>
 </div>
-<ng-container *ngIf="(categories | async)">
+<ng-container *ngIf="categories">
   <panel-toolbar (expansion)="toggleExpansionOut($event)" (descriptions)="toggleDescriptionsOut($event)"></panel-toolbar>
   <mat-list class="container-out" cdkDropList (cdkDropListDropped)="dropCat($event)">
-    <div class="itemCat" *ngFor="let category of (categories|async)" cdkDrag >
+    <div class="itemCat" *ngFor="let category of categories" cdkDrag >
       <div class="itemCat-placeholder" *cdkDragPlaceholder></div>
       <mat-expansion-panel #expansionPanel>  
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <fa-icon cdkDragHandle [icon]="['fas','grip-vertical']"></fa-icon>{{category.name}}
+            <fa-icon class="drag-icon" cdkDragHandle [icon]="['fas','grip-vertical']"></fa-icon>
+            {{category.name}}
+            <button class="edit-cat small-button" mat-button (click)="editCategory($event,category)">
+              <fa-icon [icon]="['fa','edit']"></fa-icon>
+            </button>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
+      <markdown *ngIf="category.showDescription" [@inOutAnimation] [data]="category.description" class="category-description"></markdown>
+      <div class="cat-edit-bar">
+        <button class="add-item-cat" mat-button (click)="addItemToCategory(category)">
+          Add Item<fa-icon [icon]="['fa','plus']"></fa-icon>
+        </button>
+        <button class="del-cat" mat-button (click)="removeCategory($event,category)">
+          Delete<fa-icon [icon]="['fa','trash']"></fa-icon>
+        </button>
+      </div>
       <mat-list
         [id]="category.id" 
         cdkDropList 
@@ -38,6 +51,7 @@
           [item]="item" class="item" 
           (editing)="itemEditing($event)"
           (editingEnd)="itemEditingEnd($event)"
+          (deleteItem)="removeItem($event.item)"
           cdkDrag> 
             <div class="item-placeholder" *cdkDragPlaceholder></div>
           </list-item>
@@ -48,4 +62,7 @@
         </mat-expansion-panel>
     </div>
   </mat-list>
+  <button class="add-fab" mat-mini-fab (click)="addCategory()">
+    <fa-icon [icon]="['fa','plus']"></fa-icon>
+  </button>
 </ng-container>

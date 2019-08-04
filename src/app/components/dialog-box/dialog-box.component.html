@@ -1,0 +1,5 @@
+<div>{{data.text}}</div>
+<div class="buttons-container">
+  <button mat-raised-button [color]="data.confirmBtn.color" (click)="confirm('confirmed')">{{data.confirmBtn.text}}</button>
+  <button mat-raised-button [color]="data.cancelBtn.color" (click)="confirm('cancelled')">{{data.cancelBtn.text}}</button>
+</div>

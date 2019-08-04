@@ -1,0 +1,44 @@
+:host{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.buttons-container{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.buttons-container button{
+    margin-left: 16px;
+}
+
+
+// Import library functions for theme creation.
+@import '~@angular/material/theming';
+@import '../../app.component.scss';
+
+@mixin dialog-box-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $error: map-get($theme, warn);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  .btn-primary{
+      color: mat-color($primary, default-constrast);
+      background: mat-color($primary);
+  }
+
+  .btn-info{
+    color: mat-color($foreground, text);
+  }
+
+  .btn-danger{
+    color: mat-color($error, default-constrast);
+    background: mat-color($error);
+    }
+}

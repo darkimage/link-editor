@@ -5,12 +5,12 @@
 // Import library functions for theme creation.
 @import '~@angular/material/theming';
 // Import scheme for editor
-@import 'app/components/editor/editor.component.scss';
 @import 'app/components/item/item.component.scss';
 @import 'app/components/drop-container/drop-container.component.scss';
 @import 'app/components/home/home.component.scss';
 @import 'app/components/toolbar/toolbar.component.scss';
 @import 'app/components/category-list/category-list.component.scss';
+@import 'app/components/dialog-box/dialog-box.component.scss';
 
 // Include non-theme styles for core. 
 @include mat-core();
@@ -58,16 +58,49 @@ $theme: mat-light-theme($primary, $accent);
 // Include theme styles for your custom components.
 @include list-item-theme($theme);
 @include drop-container-theme($theme);
-@include lists-theme($theme);
 @include home-toolbar-theme($theme);
 @include panel-toolbar-theme($theme);
 @include category-list-theme($theme);
+@include dialog-box-theme($theme);
+
+@mixin global-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $error: map-get($theme, warn);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  blockquote{
+    margin-inline-start: 0;
+    border-left: mat-color($primary) 5px solid;
+    padding: 0 4px;
+  }
+
+  .snack-error{
+      background: mat-color($error);
+      color: mat-color($error, default-contrast);
+      width: 60%!important;
+      margin: 16px auto !important;
+  }
+
+  .snack-error button{
+      color: mat-color($error, default-contrast);
+  }
+
+  .snack-info{
+    width: 60%!important;
+    margin: 16px auto !important;
+  }
+}
+
+@include global-theme($theme);
 
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
+
 
 ::-webkit-scrollbar {
   width: 5px;

@@ -1,5 +1,8 @@
 <ng-container *ngIf="hasDropped; else dropContainer">
   <ng-content></ng-content>
+  <button *ngIf="config.type === 'output'" class="export-fab" mat-mini-fab (click)="export()">
+    <fa-icon [icon]="['fa','file-export']"></fa-icon>
+  </button>
 </ng-container>
 <ng-template ng-template #dropContainer>
   <div dropFile #container (dropped)="onFileDropped($event)" [onHover]="'drop-hover'" class="drop-container ">

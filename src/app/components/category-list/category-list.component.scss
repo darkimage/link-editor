@@ -4,6 +4,7 @@
 
 :host{
     // margin: 0 16px;
+    position: relative;
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -67,9 +68,12 @@
         font-size: 14px;
     }
 
-    .itemCat fa-icon{
+    .itemCat .drag-icon{
         padding-right: 5px;
         cursor: move;
+    }
+
+    .itemCat fa-icon{
         color: map_get($mat-grey, 400);
     }
 
@@ -119,6 +123,40 @@
 
     .retry-error > fa-icon{
         color: mat-color($accent,700);
+    }
+
+    .cat-edit-bar{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+    }
+
+    .cat-edit-bar fa-icon{
+        margin-left: 4px;
+    }
+    
+    .cat-edit-bar button{
+        margin: 0 4px;
+    }
+
+    .del-cat{
+        background: mat-color($error);
+        color: mat-color($error,default-contrast);
+    }
+
+    .del-cat fa-icon{
+        color: mat-color($error,default-contrast);
+    }
+
+    .add-item-cat{
+        background: mat-color($primary);
+        color: mat-color($primary, default-contrast);
+    }
+
+    .add-item-cat fa-icon{
+        color: mat-color($primary, default-contrast);
     }
 }
 
@@ -210,20 +248,17 @@
     justify-content: center;
 }
 
-// ng-scrollbar{
-//     margin-top: -32px;
-// }
-
-as-split-area{
-    overflow: hidden;
+.add-fab{
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
 }
 
+.edit-cat{
+    margin-left: auto;
+    cursor: auto;
+}
 
-
-// .drop-left{
-//     margin-right: 16px;
-// }
-
-// .drop-right{
-//     margin-left: 16px;
-// }
+.edit-cat fa-icon{
+    padding: 2px 0;
+}

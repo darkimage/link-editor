@@ -61,12 +61,12 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
                 });
             });
             // console.log(categoriesArray);
-            this.write(categoriesArray, '');
+            // this.write(categoriesArray, '');
         });
         return categoriesArray;
     }
 
-    write(data: ItemCategory[], savePath: String) {
+    write(data: ItemCategory[]): String {
         let content = `---${this.jekyllopts}---\n`;
         let links = '';
         data.forEach((cat: ItemCategory) => {
@@ -77,6 +77,7 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
             });
         });
         content += `\n[comment]: <> (Raccolta dei link)\n${links}`;
-        this.fileservice.saveFile(savePath, content);
+        return content;
+        // this.fileservice.saveFile(savePath, content);
     }
 }

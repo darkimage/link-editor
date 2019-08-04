@@ -10,7 +10,9 @@ import { InputParsingStrategy, ParsingStrategyError } from '../../classes/input-
 import { MatDialog } from '@angular/material';
 import { StrategyDialogComponent, DialogStrategyConfig } from '../strategy-dialog/strategy-dialog.component';
 
-export interface DropContainerConfig { text: String; }
+export type DropCantainerType = 'input' | 'output';
+
+export interface DropContainerConfig { text: String; type: DropCantainerType; }
 
 @Component({
   selector: 'app-drop-container',
@@ -19,9 +21,11 @@ export interface DropContainerConfig { text: String; }
 })
 export class DropContainerComponent implements OnInit {
   hasDropped: Boolean = false;
+  strategy: InputParsingStrategy;
   @Input() config: DropContainerConfig;
   @Input() dialogConfig: DialogStrategyConfig;
   @Output() processedData: EventEmitter<Promise<Array<ItemCategory>> | Promise<Array<ItemData>>> = new EventEmitter();
+  @Output() exportStrategy: EventEmitter<InputParsingStrategy> =  new EventEmitter();
   // @ViewChild('container', {static: false}) contiener: ElementRef;/\
   constructor(
     private processor: FileProcessorService,
@@ -52,6 +56,7 @@ export class DropContainerComponent implements OnInit {
 
     choseDialog.afterClosed().subscribe(strategy => {
       if (strategy) {
+        this.strategy = strategy;
         this.hasDropped = true;
         this.processedData.next(this.getProcessPromise(ev, strategy));
       }
@@ -60,6 +65,12 @@ export class DropContainerComponent implements OnInit {
 
   reset() {
     this.hasDropped = false;
+  }
+
+  export() {
+    if (this.strategy) {
+      this.exportStrategy.emit(this.strategy);
+    }
   }
 
 }

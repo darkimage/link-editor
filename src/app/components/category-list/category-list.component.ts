@@ -1,25 +1,48 @@
+import { ItemLink } from './../../classes/item-data-class';
+import { DialogBoxComponent, DialogBoxConfig, UserChoice } from './../dialog-box/dialog-box.component';
+import { CategoryEditDialogComponent } from './../category-edit-dialog/category-edit-dialog.component';
 import { Component, OnInit, Input, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { ItemCategory } from '../../classes/item-category-class';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, config } from 'rxjs';
 import {  } from 'electron';
 import { ExpansionState, DescriptionState } from '../toolbar/toolbar.component';
-import { MatExpansionPanel } from '@angular/material';
+import { MatExpansionPanel, MatDialog, MatSnackBar } from '@angular/material';
 import { ItemComponent } from '../item/item.component';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragStart, CdkDrag } from '@angular/cdk/drag-drop';
 import { ItemData } from '../../classes/item-data-class';
 import { itemEditEvent } from '../item/item.interfaces';
 import { ParsingStrategyError } from '../../classes/input-parsing-strategy';
+import { style, transition, trigger, animate } from '@angular/animations';
 
 @Component({
   selector: 'category-list',
   templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.scss']
+  styleUrls: ['./category-list.component.scss'],
+  animations: [
+    trigger(
+      'inOutAnimation',[
+        transition(
+          ':enter', [
+            style({ opacity: 0 }),
+            animate('500ms ease-in', style({ height: '100%', opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave', [
+            style({ opacity: 1 }), 
+            animate('500ms ease-out', style({height: '0', opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class CategoryListComponent implements OnInit {
   //VARIABLES
-  _listIds:Array<String> = new Array<String>();
+  _listIds: Array<String> = new Array<String>();
   ids: BehaviorSubject<Array<String>> = new BehaviorSubject<Array<String>>([]);
-  categories: Promise<Array<ItemCategory>>;
+  categories: Array<ItemCategory>;
+  // _categories: Array<ItemCategory>;
   lastItemSelected: ItemData = undefined;
   processingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined});
   @ViewChildren('expansionPanel') expansionPanels: QueryList<MatExpansionPanel>;
@@ -28,9 +51,9 @@ export class CategoryListComponent implements OnInit {
   //INPUTS
   @Input() set data(cat: Promise<Array<ItemCategory>>) {
     if (!cat) { return; }
-    this.categories = cat;
-    this.categories.then((cats: Array<ItemCategory>) => {
-      cats.forEach((category: ItemCategory) => {
+    cat.then((cats: Array<ItemCategory>) => {
+      this.categories = cats;
+      this.categories.forEach((category: ItemCategory) => {
         category.id = this.getUniqueId();
       });
       const ids = this.getListIds(cats);
@@ -49,25 +72,14 @@ export class CategoryListComponent implements OnInit {
   //OUTPUTS
   @Output() reset: EventEmitter<void> = new EventEmitter<void>();
   @Output() idsGenerated: EventEmitter<Array<String>> = new EventEmitter<Array<String>>();
-  constructor() { }
+
+  constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+    ) { }
 
   ngOnInit() {
   }
-
-  // refresh(){
-  //   this.categories.then((cats: Array<ItemCategory>) => {
-  //     cats.forEach((category: ItemCategory) => {
-  //       category.id = this.getUniqueId();
-  //     });
-  //     this.ids = this.getListIds(cats);
-  //     this._listIds = this.ids;
-  //     this._listIds = this._listIds.concat(this.linkTo.ids);
-  //     console.log(this.linkTo.ids);
-  //     this.idsGenerated.emit(this.ids);
-  //  }).catch((reason: ParsingStrategyError) => {
-  //    this.processingError.next(reason);
-  //  });
-  // }
 
   getUniqueId() {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -92,9 +104,7 @@ export class CategoryListComponent implements OnInit {
   }
 
   dropCat(event: CdkDragDrop<Array<ItemCategory>>) {
-    this.categories.then((cats: Array<ItemCategory>) =>{
-      moveItemInArray(cats, event.previousIndex, event.currentIndex);
-    });
+      moveItemInArray(this.categories, event.previousIndex, event.currentIndex);
   }
 
   dragStart(event: CdkDragStart<ItemData>) {
@@ -109,7 +119,6 @@ export class CategoryListComponent implements OnInit {
 
   itemEditing(ev: itemEditEvent) {
     if (ev.action === 'key') {
-      // console.log(ev);
       ev.component.el.nativeElement.scrollIntoView({behavior: 'smooth'});
     }
     this.dragItems.toArray().forEach((drag: CdkDrag<ItemData>) => {
@@ -154,6 +163,94 @@ export class CategoryListComponent implements OnInit {
           item.showDescription = true;
         }
     });
+
+    this.categories.forEach((category: ItemCategory) => {
+      if (descriptionState === 'hide') {
+        category.showDescription = false;
+      } else {
+        category.showDescription = true;
+      }
+    });
+  }
+
+  addCategory() {
+    const addDialog = this.dialog.open(CategoryEditDialogComponent, {
+      width: '60%',
+      height: '80%',
+      data: {
+        data: undefined,
+        title: 'Add category',
+        mode: 'create'
+      }
+    });
+
+    addDialog.afterClosed().subscribe((result: ItemCategory) => {
+      console.log(result);
+      if (result) {
+        this.categories.push(result);
+        this.categories.forEach((category: ItemCategory) => {
+          category.id = this.getUniqueId();
+        });
+        const ids = this.getListIds(this.categories);
+        this.ids.next(ids);
+      } else {
+        this.snackBar.open(`Category not added`, 'Ok', {
+          duration: 2000,
+          panelClass: 'snack-error'
+        });
+      }
+    });
+
+  }
+
+  editCategory(ev, cat: ItemCategory) {
+    ev.stopPropagation();
+    this.dialog.open(CategoryEditDialogComponent, {
+      width: '60%',
+      height: '80%',
+      data: {
+        data: cat,
+        title: 'Edit category',
+        mode: 'edit'
+      }
+    });
+  }
+
+  removeItem(item: ItemData) {
+    if (item) {
+        this.categories.forEach((category: ItemCategory) => {
+          category.items = category.items.filter(value => value !== item);
+      });
+    }
+  }
+
+  removeCategory(ev, cat: ItemCategory) {
+    ev.stopPropagation();
+    const dialogData = new DialogBoxConfig();
+    dialogData.text = `Are you sure to delete the category ${cat.name}?`;
+    dialogData.confirmBtn = {
+      text: 'Delete',
+      color: 'warn'
+    };
+    dialogData.onConfirm = (choice: UserChoice) => choice;
+    const userChoice = this.dialog.open(DialogBoxComponent, {
+      width: '50%',
+      data: dialogData
+    });
+
+    userChoice.afterClosed().subscribe((res: UserChoice) =>{
+      if (res === 'confirmed'){
+        this.categories = this.categories.filter(value => value !== cat);
+        this.snackBar.open(`Category ${cat.name} deleted`,'Ok',{
+          duration: 2000,
+          panelClass: 'snack-info'
+        });
+      }
+    });
+  }
+
+  addItemToCategory(category: ItemCategory) {
+    category.items.unshift(new ItemData('New Item', {link: '', tag: this.getUniqueId()}));
   }
 
 }

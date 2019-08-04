@@ -41,6 +41,7 @@ export class ItemComponent implements OnInit {
   @Output() editing: EventEmitter<itemEditEvent> = new EventEmitter<itemEditEvent>();
   @Output() editingEnd: EventEmitter<itemEditEvent> = new EventEmitter<itemEditEvent>();
   @Output() selected: EventEmitter<ItemComponent> = new EventEmitter<ItemComponent>();
+  @Output() deleteItem: EventEmitter<ItemComponent> = new EventEmitter<ItemComponent>();
 
   @HostListener('dblclick') onDblClick() {
     this.enterEditMode('dbclick');
@@ -66,6 +67,8 @@ export class ItemComponent implements OnInit {
       }
     } else if (event.keyCode === 13 && this.editMode && this.canClose){
       this.exitEditMode('key');
+    } else if (event.keyCode === 46 && !this.editMode && this.isSelected) {
+      this.deleteItem.emit(this);
     }
   }
 

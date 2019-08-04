@@ -34,7 +34,11 @@ import {
   faEye,
   faEyeSlash,
   faExclamationTriangle,
-  faRedoAlt
+  faRedoAlt,
+  faPlus,
+  faEdit,
+  faTrash,
+  faFileExport
 } from '@fortawesome/free-solid-svg-icons';
 library.add(
   faGripVertical,
@@ -48,7 +52,11 @@ library.add(
   faEye,
   faEyeSlash,
   faExclamationTriangle,
-  faRedoAlt
+  faRedoAlt,
+  faPlus,
+  faEdit,
+  faTrash,
+  faFileExport
 );
 
 import {
@@ -63,7 +71,8 @@ import {
   MatSelectModule,
   MatTabsModule,
   MatDialogModule,
-  MatDividerModule
+  MatDividerModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 import { DragDropModule} from '@angular/cdk/drag-drop';
@@ -82,12 +91,14 @@ import { MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { ItemEditorComponent } from './components/item-editor/item-editor.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { StrategyDialogComponent } from './components/strategy-dialog/strategy-dialog.component';
+import { CategoryEditDialogComponent } from './components/category-edit-dialog/category-edit-dialog.component';
+import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
 
-  renderer.link = (href: string, title: string, text: string) => {
+  renderer.link = (href: string, title: string, text: string): string => {
     return `<a href="${href}" tittle="${title}" target="_blank">${text}</a>`;
   };
 
@@ -108,9 +119,12 @@ export function markedOptionsFactory(): MarkedOptions {
     ToolbarComponent,
     ItemEditorComponent,
     CategoryListComponent,
-    StrategyDialogComponent
+    StrategyDialogComponent,
+    CategoryEditDialogComponent,
+    DialogBoxComponent
   ],
   imports: [
+    MatSnackBarModule,
     MatDividerModule,
     MatDialogModule,
     MatTabsModule,
@@ -149,6 +163,10 @@ export function markedOptionsFactory(): MarkedOptions {
   ],
   providers: [ElectronService],
   bootstrap: [AppComponent],
-  entryComponents: [StrategyDialogComponent]
+  entryComponents: [
+    StrategyDialogComponent,
+    CategoryEditDialogComponent,
+    DialogBoxComponent
+  ]
 })
 export class AppModule {}

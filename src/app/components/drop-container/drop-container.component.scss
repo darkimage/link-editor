@@ -88,4 +88,16 @@
     .drop-hover > #text{
         opacity: 0;
     }
+
+    .export-fab{
+        position: absolute !important;
+        bottom: 16px;
+        left: 16px;
+        background: mat-color($accent);
+    }
+
+    .export-fab fab-icon{
+        color: mat-color($accent,default-contrast);
+    }
 }
+
