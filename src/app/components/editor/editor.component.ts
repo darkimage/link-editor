@@ -80,10 +80,6 @@ export class EditorComponent implements OnInit {
     this.inData = data;
   }
 
-  log(ev) {
-    console.log(ev);
-  }
-
   resetDropContainerOut() {
     this.outDropContainer.reset();
   }

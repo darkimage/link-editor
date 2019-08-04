@@ -92,7 +92,6 @@ export class ItemComponent implements OnInit {
 
   preventClose(value: Boolean) {
     this.canClose = value;
-    // console.log(this.canClose);
   }
 
   exitEditMode(action: EditTrigger) {

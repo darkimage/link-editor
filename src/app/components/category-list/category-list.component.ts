@@ -42,7 +42,6 @@ export class CategoryListComponent implements OnInit {
   _listIds: Array<String> = new Array<String>();
   ids: BehaviorSubject<Array<String>> = new BehaviorSubject<Array<String>>([]);
   categories: Array<ItemCategory>;
-  // _categories: Array<ItemCategory>;
   lastItemSelected: ItemData = undefined;
   processingError: BehaviorSubject<ParsingStrategyError> = new BehaviorSubject({message: '', error: undefined});
   @ViewChildren('expansionPanel') expansionPanels: QueryList<MatExpansionPanel>;
@@ -62,8 +61,6 @@ export class CategoryListComponent implements OnInit {
         this._listIds = ids;
         this._listIds = this._listIds.concat(linkids);
       });
-      console.log(this.linkTo);
-      // this.idsGenerated.emit(this.ids);
    }).catch((reason: ParsingStrategyError) => {
      this.processingError.next(reason);
    });
@@ -185,14 +182,20 @@ export class CategoryListComponent implements OnInit {
     });
 
     addDialog.afterClosed().subscribe((result: ItemCategory) => {
-      console.log(result);
       if (result) {
         this.categories.push(result);
+        this.expansionPanels.notifyOnChanges();
         this.categories.forEach((category: ItemCategory) => {
           category.id = this.getUniqueId();
         });
         const ids = this.getListIds(this.categories);
         this.ids.next(ids);
+        const scrollanim = this.expansionPanels.changes.subscribe(val => {
+          const addedPanel = val.toArray().reverse()[0];
+          addedPanel.open();
+          document.getElementById(addedPanel.id).scrollIntoView({behavior: 'smooth'});
+          scrollanim.unsubscribe();
+        });
       } else {
         this.snackBar.open(`Category not added`, 'Ok', {
           duration: 2000,
