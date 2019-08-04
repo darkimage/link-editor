@@ -19,7 +19,8 @@ export class ChromeBookmarksInputStrategy implements InputParsingStrategy {
     process(files: Array<String>): Array<ItemCategory> {
         const categoriesArray = new Array<ItemCategory>();
         files.forEach((data: String) => {
-            const categoriesBlockReg = new RegExp(/<H3.*?>(?<name>.*?)<\/H3>(?<content>.+?)(?=<H3)/, 'gms');
+            data += '%end%';
+            const categoriesBlockReg = new RegExp(/<H3.*?>(?<name>.*?)<\/H3>(?<content>.+?)(?=<H3|%end%)/, 'gms');
             const categoriesBlock = new Array<{cat: ItemCategory, data: String}>();
             let match = categoriesBlockReg.exec(data as string);
             while (match) {
