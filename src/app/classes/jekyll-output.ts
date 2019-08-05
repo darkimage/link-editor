@@ -69,7 +69,7 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
         data.forEach((cat: ItemCategory) => {
             content += `## ${cat.name}${cat.description}`;
             cat.items.forEach((item: ItemData) => {
-                content += `<a class="btn disabled btn--${item.difficulty.value}">${item.difficulty.class}</a> [${item.name}][${item.link.tag}]<br> ${item.description}\n`;
+                content += `<a class="btn disabled btn--${item.difficulty.class}">${item.difficulty.class}</a> [${item.name}][${item.link.tag}]<br> ${item.description}\n`;
                 links += `[${item.link.tag}]: ${item.link.link}\n`;
             });
         });
