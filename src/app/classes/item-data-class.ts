@@ -1,13 +1,26 @@
-export enum DifficultyClass {
-    Beginner = 'Beginner',
-    Intermediate = 'Intermediate',
-    Expert = 'Expert',
-    NotClassified = 'NotClassified'
-};
+// export enum DifficultyClass {
+//     Beginner = 'Beginner',
+//     Intermediate = 'Intermediate',
+//     Expert = 'Expert',
+//     NotClassified = 'NotClassified'
+// };
+
+export enum DifficultyStyleClass {
+    info = 'info',
+    danger = 'danger',
+    success = 'success',
+    warning = 'warning',
+    primary = 'primary',
+}
+
+export interface DifficultyStyle {
+    class: DifficultyStyleClass;
+    value: String;
+}
 
 export interface Difficulty {
-    class: DifficultyClass;
-    value: String;
+    text: String;
+    style: DifficultyStyle;
 }
 
 
@@ -18,26 +31,30 @@ export class ItemData {
     link: ItemLink;
     difficulty: Difficulty;
     description: String;
-    constructor(name: String, link: ItemLink, description?: String, difficulty?: String) {
+    constructor(name: String, link: ItemLink, description?: String, difficulty?: String, difficultyStyle?: String) {
         this.name = name;
         this.link = link;
         if (description) {
             this.description = description;
         }
-        this.difficulty = ItemData.getDifficulty(difficulty);
+
+        const style = ItemData.getDifficultyStyle(difficultyStyle);
+        this.difficulty = {text: difficulty, style: style};
     }
 
-    static getDifficulty(diff: String): Difficulty {
-        if (!diff) { return {class: DifficultyClass.NotClassified, value: ''};}
+    static getDifficultyStyle(diff: String): DifficultyStyle {
+        if (!diff) { return {class: DifficultyStyleClass.info, value: ''};}
         switch (diff.toLowerCase()) {
-            case 'beginner':
-                return {class: DifficultyClass.Beginner, value: '#3fa63f'};
-            case 'intermediate':
-                return {class: DifficultyClass.Intermediate, value: '#d67f05'};
-            case 'expert':
-                return {class: DifficultyClass.Expert, value: '#ee5f5b'};
+            case 'success':
+                return {class: DifficultyStyleClass.success, value: '#3fa63f'};
+            case 'warning':
+                return {class: DifficultyStyleClass.warning, value: '#d67f05'};
+            case 'danger':
+                return {class: DifficultyStyleClass.danger, value: '#ee5f5b'};
+            case 'primary':
+                return {class: DifficultyStyleClass.primary, value: '#007bff'};
             default:
-                return {class: DifficultyClass.NotClassified, value: ''};
+                return {class: DifficultyStyleClass.info, value: ''};
         }
     }
 }

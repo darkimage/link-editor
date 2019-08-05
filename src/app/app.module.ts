@@ -72,7 +72,8 @@ import {
   MatTabsModule,
   MatDialogModule,
   MatDividerModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { DragDropModule} from '@angular/cdk/drag-drop';
@@ -93,6 +94,7 @@ import { CategoryListComponent } from './components/category-list/category-list.
 import { StrategyDialogComponent } from './components/strategy-dialog/strategy-dialog.component';
 import { CategoryEditDialogComponent } from './components/category-edit-dialog/category-edit-dialog.component';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
+import { SafePipe } from './pipes/safepipe.pipe';
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
@@ -121,9 +123,11 @@ export function markedOptionsFactory(): MarkedOptions {
     CategoryListComponent,
     StrategyDialogComponent,
     CategoryEditDialogComponent,
-    DialogBoxComponent
+    DialogBoxComponent,
+    SafePipe
   ],
   imports: [
+    MatTooltipModule,
     MatSnackBarModule,
     MatDividerModule,
     MatDialogModule,

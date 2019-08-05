@@ -2,6 +2,7 @@ import { Component, OnInit, HostBinding, HostListener, ElementRef, Input, Output
 import { ItemData } from '../../classes/item-data-class';
 import { itemEditEvent } from './item.interfaces';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ElectronService } from '../../providers/electron.service';
 
 export type EditTrigger = 'dbclick' | 'key' | 'focus';
 
@@ -35,7 +36,8 @@ export class ItemComponent implements OnInit {
   canClose: Boolean = true;
   constructor(
     public el: ElementRef,
-    private render: Renderer2) { }
+    private render: Renderer2,
+    private electron: ElectronService) { }
 
   @Input() item: ItemData;
   @Output() editing: EventEmitter<itemEditEvent> = new EventEmitter<itemEditEvent>();
@@ -108,6 +110,27 @@ export class ItemComponent implements OnInit {
     this.render.setStyle(this.el.nativeElement, 'cursor', 'auto');
     this.editing.emit({component: this, action: action});
     this.unselect();
+  }
+
+  linkclick(ev) {
+    ev.preventDefault();
+    if (ev.ctrlKey || ev.metaKey) {
+      console.log(ev.target)
+     window.open(ev.target.href, '_blank');
+    }
+  }
+
+  linkHover(ev: MouseEvent) {
+    // console.log(ev);s
+    if (ev.metaKey || ev.ctrlKey) {
+      this.render.setStyle(ev.target, 'cursor', 'pointer');
+    } else {
+      this.render.setStyle(ev.target, 'cursor', 'default');
+    }
+  }
+
+  linkHoverLeave(ev: MouseEvent){
+    this.render.removeStyle(ev.target, 'cursor');
   }
 
   ngOnInit() {

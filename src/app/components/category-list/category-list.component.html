@@ -21,7 +21,7 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <fa-icon class="drag-icon" cdkDragHandle [icon]="['fas','grip-vertical']"></fa-icon>
-            {{category.name}}
+            <span [innerHTML]="category.name | safe:'html'"></span>
             <button class="edit-cat small-button" mat-button (click)="editCategory($event,category)">
               <fa-icon [icon]="['fa','edit']"></fa-icon>
             </button>

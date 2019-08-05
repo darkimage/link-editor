@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ItemData, Difficulty } from '../../classes/item-data-class';
+import { ItemData, Difficulty, DifficultyStyle } from '../../classes/item-data-class';
 
 @Component({
   selector: 'item-editor',
@@ -8,11 +8,12 @@ import { ItemData, Difficulty } from '../../classes/item-data-class';
 })
 export class ItemEditorComponent implements OnInit {
   @Output() preventClose: EventEmitter<Boolean> =  new EventEmitter<Boolean>();
-  difficultyValues: Array<Difficulty> = new Array<Difficulty>(
-    ItemData.getDifficulty('Beginner'),
-    ItemData.getDifficulty('Intermediate'),
-    ItemData.getDifficulty('Expert'),
-    ItemData.getDifficulty('NotClassified')
+  difficultyValues: Array<DifficultyStyle> = new Array<DifficultyStyle>(
+    ItemData.getDifficultyStyle('primary'),
+    ItemData.getDifficultyStyle('success'),
+    ItemData.getDifficultyStyle('danger'),
+    ItemData.getDifficultyStyle('warning'),
+    ItemData.getDifficultyStyle('info'),
   );
   @Input() item: ItemData;
   constructor() { }
@@ -32,6 +33,6 @@ export class ItemEditorComponent implements OnInit {
     this.preventClose.emit(true);
   }
 
-  compareDifficulty = (d1: Difficulty, d2: Difficulty) => d1.class === d2.class;
+  compareDifficulty = (d1: DifficultyStyle, d2: DifficultyStyle) => d1.class === d2.class;
 
 }

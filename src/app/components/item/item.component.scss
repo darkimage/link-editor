@@ -20,6 +20,7 @@
 
     mat-chip{
       color: mat-color($accent, default-contrast) !important;
+      white-space: nowrap;
     }
 
     .item-editor{

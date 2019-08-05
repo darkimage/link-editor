@@ -183,7 +183,7 @@ export class CategoryListComponent implements OnInit {
 
     addDialog.afterClosed().subscribe((result: ItemCategory) => {
       if (result) {
-        this.categories.push(result);
+        this.categories.unshift(result);
         this.expansionPanels.notifyOnChanges();
         this.categories.forEach((category: ItemCategory) => {
           category.id = this.getUniqueId();
@@ -191,7 +191,7 @@ export class CategoryListComponent implements OnInit {
         const ids = this.getListIds(this.categories);
         this.ids.next(ids);
         const scrollanim = this.expansionPanels.changes.subscribe(val => {
-          const addedPanel = val.toArray().reverse()[0];
+          const addedPanel = val.toArray()[0];
           addedPanel.open();
           document.getElementById(addedPanel.id).scrollIntoView({behavior: 'smooth'});
           scrollanim.unsubscribe();

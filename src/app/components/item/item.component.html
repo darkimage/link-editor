@@ -1,16 +1,19 @@
 <div class="item" *ngIf="!editMode; else edit">
 <div class="item-header">
-    <a href="{{item.link.link}}" target="_blank">{{item.name}}</a>
+    <a (mousemove)="linkHover($event)" 
+    (mouseleave)="linkHoverLeave($event)" 
+    (click)="linkclick($event)" 
+    matTooltip="Ctrl + click open the link"
+    matTooltipPosition="above"
+    matTooltipShowDelay="500"
+    href="{{item.link.link}}" target="_blank" [innerHTML]="item.name | safe:'html'"></a>
     <mat-chip-list>
-      <mat-chip [ngStyle]="{'background-color': item.difficulty.value}">
-        {{item.difficulty.class}}
+      <mat-chip [ngStyle]="{'background-color': item.difficulty.style.value}">
+        {{item.difficulty.text}}
       </mat-chip>
     </mat-chip-list>
 </div>
 <markdown *ngIf="showDescription" [@inOutAnimation] [data]="item.description" class="item-description"></markdown>
-<!-- <div *ngIf="showDescription" [@inOutAnimation] class="item-description" markdown ngPreserveWhitespaces>
-  {{item.description}}
-</div> -->
 </div>
 <ng-template #edit>
   <item-editor [item]="item" (preventClose)="preventClose($event)"></item-editor>
