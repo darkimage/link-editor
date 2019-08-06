@@ -7,6 +7,7 @@
   (exportStrategy)="exportOut($event)"
   [dialogConfig]="outDropConfig">
     <category-list
+    id="output"
     #outputList
     (reset)="resetDropContainerOut()"
     [linkTo]="inputList"
@@ -21,6 +22,7 @@
   [dialogConfig]="inDropConfig">
     <category-list
     #inputList
+    id="input"
     (reset)="resetDropContainerIn()"
     [linkTo]="outputList"
     [data]="inData "></category-list>

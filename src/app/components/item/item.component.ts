@@ -1,8 +1,9 @@
-import { Component, OnInit, HostBinding, HostListener, ElementRef, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
+import { Component, OnInit, HostBinding, HostListener, ElementRef, Input, Output, EventEmitter, Renderer2, ViewChild } from '@angular/core';
 import { ItemData } from '../../classes/item-data-class';
 import { itemEditEvent } from './item.interfaces';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ElectronService } from '../../providers/electron.service';
+import { ItemEditorComponent } from '../item-editor/item-editor.component';
 
 export type EditTrigger = 'dbclick' | 'key' | 'focus';
 
@@ -44,6 +45,7 @@ export class ItemComponent implements OnInit {
   @Output() editingEnd: EventEmitter<itemEditEvent> = new EventEmitter<itemEditEvent>();
   @Output() selected: EventEmitter<ItemComponent> = new EventEmitter<ItemComponent>();
   @Output() deleteItem: EventEmitter<ItemComponent> = new EventEmitter<ItemComponent>();
+  @ViewChild('editor', {static: false}) editor: ItemEditorComponent;
 
   @HostListener('dblclick') onDblClick() {
     this.enterEditMode('dbclick');
@@ -97,6 +99,7 @@ export class ItemComponent implements OnInit {
   }
 
   exitEditMode(action: EditTrigger) {
+    this.editor.Update();
     this.render.removeClass(this.el.nativeElement, 'item-editor');
     this.editMode = false;
     this.render.removeStyle(this.el.nativeElement, 'cursor');
@@ -115,7 +118,7 @@ export class ItemComponent implements OnInit {
   linkclick(ev) {
     ev.preventDefault();
     if (ev.ctrlKey || ev.metaKey) {
-      console.log(ev.target)
+      // console.log(ev.target)
      window.open(ev.target.href, '_blank');
     }
   }

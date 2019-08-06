@@ -1,5 +1,6 @@
 import { LayoutStyle } from './../editor/editor.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   layout: LayoutStyle = LayoutStyle.columnLeftRight;
-  constructor() { }
+  constructor(
+    public themeService: ThemeService,
+    private renderer: Renderer2) { }
 
   ngOnInit() {
+    this.themeService.darkTheme.subscribe(isDark => {
+      if (isDark) {
+        this.renderer.addClass(document.body, 'theme-dark');
+      } else {
+        this.renderer.removeClass(document.body, 'theme-dark');
+      }
+    });
   }
 
   cicleLayout() {
@@ -25,6 +35,10 @@ export class HomeComponent implements OnInit {
           this.layout = LayoutStyle.columnLeft;
           break;
     }
+  }
+
+  cicleTheme() {
+    this.themeService.switchTheme();
   }
 
 }

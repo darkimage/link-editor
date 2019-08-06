@@ -61,6 +61,9 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
                 });
             });
         });
+        if (categoriesArray.length === 0) {
+            throw new Error('Nothing parsed');
+        }
         return categoriesArray;
     }
 

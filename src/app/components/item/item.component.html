@@ -1,4 +1,4 @@
-<div class="item" *ngIf="!editMode; else edit">
+<div class="list-item" *ngIf="!editMode; else edit">
 <div class="item-header">
     <a (mousemove)="linkHover($event)" 
     (mouseleave)="linkHoverLeave($event)" 
@@ -16,5 +16,5 @@
 <markdown *ngIf="showDescription" [@inOutAnimation] [data]="item.description" class="item-description"></markdown>
 </div>
 <ng-template #edit>
-  <item-editor [item]="item" (preventClose)="preventClose($event)"></item-editor>
+  <item-editor #editor [item]="item" (preventClose)="preventClose($event)"></item-editor>
 </ng-template>

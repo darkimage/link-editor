@@ -1,6 +1,6 @@
 <ng-container *ngIf="hasDropped; else dropContainer">
   <ng-content></ng-content>
-  <button *ngIf="config.type === 'output'" class="export-fab" mat-mini-fab (click)="export()">
+  <button *ngIf="config.type === 'output' && (dataPromise | async)" class="export-fab" mat-mini-fab (click)="export()">
     <fa-icon [icon]="['fa','file-export']"></fa-icon>
   </button>
 </ng-container>

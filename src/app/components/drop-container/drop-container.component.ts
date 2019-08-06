@@ -22,6 +22,7 @@ export interface DropContainerConfig { text: String; type: DropCantainerType; }
 export class DropContainerComponent implements OnInit {
   hasDropped: Boolean = false;
   strategy: InputParsingStrategy;
+  dataPromise: Promise<Array<ItemCategory>>;
   @Input() config: DropContainerConfig;
   @Input() dialogConfig: DialogStrategyConfig;
   @Output() processedData: EventEmitter<Promise<Array<ItemCategory>> | Promise<Array<ItemData>>> = new EventEmitter();
@@ -58,7 +59,9 @@ export class DropContainerComponent implements OnInit {
       if (strategy) {
         this.strategy = strategy;
         this.hasDropped = true;
-        this.processedData.next(this.getProcessPromise(ev, strategy));
+        const promise  = this.getProcessPromise(ev, strategy);
+        this.dataPromise = promise;
+        this.processedData.next(promise);
       }
     });
   }

@@ -65,10 +65,12 @@ export class CategoryListComponent implements OnInit {
      this.processingError.next(reason);
    });
   }
+  @Input() id: String;
   @Input() linkTo: CategoryListComponent;
   //OUTPUTS
   @Output() reset: EventEmitter<void> = new EventEmitter<void>();
   @Output() idsGenerated: EventEmitter<Array<String>> = new EventEmitter<Array<String>>();
+  
 
   constructor(
     private dialog: MatDialog,
@@ -144,11 +146,11 @@ export class CategoryListComponent implements OnInit {
 
   toggleExpansionOut(expansionState: ExpansionState){
     this.expansionPanels.toArray().forEach((panel: MatExpansionPanel) => {
-        if (expansionState === 'expanded') {
-          panel.open();
-        } else {
-          panel.close();
-        }
+      if (expansionState === 'expanded') {
+        panel.open();
+      } else {
+        panel.close();
+      }
     });
   }
 

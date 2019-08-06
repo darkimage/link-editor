@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import '../polyfills';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -34,11 +34,12 @@ import {
   faEye,
   faEyeSlash,
   faExclamationTriangle,
-  faRedoAlt,
+  faRedo,
   faPlus,
   faEdit,
   faTrash,
-  faFileExport
+  faFileExport,
+  faAdjust
 } from '@fortawesome/free-solid-svg-icons';
 library.add(
   faGripVertical,
@@ -52,11 +53,12 @@ library.add(
   faEye,
   faEyeSlash,
   faExclamationTriangle,
-  faRedoAlt,
+  faRedo,
   faPlus,
   faEdit,
   faTrash,
-  faFileExport
+  faFileExport,
+  faAdjust
 );
 
 import {
@@ -150,6 +152,7 @@ export function markedOptionsFactory(): MarkedOptions {
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     AngularSplitModule.forRoot(),
     MarkdownModule.forRoot({
       markedOptions: {

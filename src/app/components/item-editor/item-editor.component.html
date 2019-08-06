@@ -1,28 +1,27 @@
+<form [formGroup]="form">
+<mat-form-field>
+  <input matInput formControlName="name" placeholder="Name"> <!--[(ngModel)]="item.name"-->
+</mat-form-field>
 <h4>Edit Difficulty</h4>
 <mat-form-field>
-  <input matInput placeholder="Difficulty Name" [(ngModel)]="item.difficulty.text">
+  <input matInput formControlName="difficultyName" placeholder="Difficulty Name">
 </mat-form-field>
 <mat-form-field>
   <mat-label>Difficulty Style</mat-label>
-  <mat-select (selectionChange)="preventCloseEditMode()" [(value)]="item.difficulty.style" [compareWith]="compareDifficulty">
+  <mat-select formControlName="difficultyColor" [value]="_item.difficulty.style" (selectionChange)="preventCloseEditMode()" [compareWith]="compareDifficulty">
     <mat-option *ngFor="let diff of difficultyValues" [value]="diff">
       {{diff.class}}
     </mat-option>
   </mat-select>
 </mat-form-field>
-<mat-form-field>
-  <input matInput placeholder="Name" [(ngModel)]="item.name">
-</mat-form-field>
-<mat-divider></mat-divider>
 <h4>Edit Link</h4>
 <mat-form-field>
-  <input matInput placeholder="Tag" [(ngModel)]="item.link.tag">
+  <input matInput formControlName="linkTag" placeholder="Tag">
 </mat-form-field>
 <mat-form-field>
-    <input matInput placeholder="Link" [(ngModel)]="item.link.link">
-  </mat-form-field>
-<mat-divider></mat-divider>
-<mat-tab-group>
+  <input matInput formControlName="link" placeholder="Link">
+</mat-form-field>
+<mat-tab-group (selectedTabChange)="updateDesc()">
   <mat-tab label="Edit description">
     <mat-form-field class="textarea">
       <textarea
@@ -32,12 +31,13 @@
       matInput
       cdkTextareaAutosize
       #autosize="cdkTextareaAutosize"
-      [(ngModel)]="item.description"></textarea>
+      formControlName="description"></textarea>
     </mat-form-field>
   </mat-tab>
-  <mat-tab label="Preview">
+  <mat-tab label="Preview" >
     <div class="preview">
-      <markdown class="preview" [data]="item.description" ></markdown>
+      <markdown class="preview" [data]="previewDesc"></markdown>
     </div>
   </mat-tab>
 </mat-tab-group>
+</form>

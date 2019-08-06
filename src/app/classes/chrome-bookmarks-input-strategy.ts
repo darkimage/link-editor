@@ -43,6 +43,9 @@ export class ChromeBookmarksInputStrategy implements InputParsingStrategy {
                 }
             });
         });
+        if (categoriesArray.length === 0) {
+            throw new Error('Nothing parsed');
+        }
         return categoriesArray;
     }
 }

@@ -39,10 +39,6 @@
         width: 100%;
         border-bottom: solid 1px  mat-color($foreground, divider);
         color: mat-color($foreground, text);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
         box-sizing: border-box;
         cursor: move;
         background: mat-color($background, card);
@@ -158,8 +154,70 @@
     .add-item-cat fa-icon{
         color: mat-color($primary, default-contrast);
     }
+
+    .add-fab{
+        background: mat-color($accent);
+    }
 }
 
+@mixin category-list-dark-theme($theme){
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $error: map-get($theme, warn);
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+
+    .list{
+        border: solid 1px mat-color($foreground, divider);
+        background: mat-color($mat-grey, 700)!important;
+    }
+
+    .as-split-gutter{
+        background-color: mat-color($mat-grey, 800) !important;
+    }
+
+    .item{
+        border-bottom: solid 1px  mat-color($foreground, divider);
+        color: mat-color($foreground, text);
+        background: mat-color($mat-grey, 700) !important;
+    }
+
+    .del-cat{
+        background: mat-color($error);
+        color: mat-color($error,default-contrast);
+    }
+
+    .del-cat fa-icon{
+        color: mat-color($error,default-contrast);
+    }
+
+    .add-item-cat{
+        background: mat-color($primary);
+        color: mat-color($primary, default-contrast);
+    }
+
+    .add-item-cat fa-icon{
+        color: mat-color($primary, default-contrast);
+    }
+
+    .add-fab{
+        background: mat-color($accent);
+    }
+
+    .add-fab fab-icon{
+        color: mat-color($accent,default-contrast);
+    }
+
+    .item-placeholder{
+        background: mat-color($mat-grey,600);
+        border: dotted 3px mat-color($accent,200);
+    }
+
+    .itemCat-placeholder{
+        background: mat-color($mat-grey,700);
+        border: dotted 3px mat-color($accent,200);
+    }
+}
 
 .mat-list-base{
     padding-top: 0;

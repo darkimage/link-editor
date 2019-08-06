@@ -39,7 +39,7 @@ export class ItemData {
         }
 
         const style = ItemData.getDifficultyStyle(difficultyStyle);
-        this.difficulty = {text: difficulty, style: style};
+        this.difficulty = {text: (difficulty) ? difficulty : 'Not Classfied', style: style};
     }
 
     static getDifficultyStyle(diff: String): DifficultyStyle {

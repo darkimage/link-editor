@@ -15,7 +15,21 @@
     display: flex;
     flex-direction: row;
     flex: 0 0 auto;
+    justify-content: flex-end;
     // padding: 0 16px;
+    color: mat-color($primary, default-contrast);
+  }
+  
+}
+
+@mixin home-toolbar-dark-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  .second-row{
+    background-color: mat-color($primary);
     color: mat-color($primary, default-contrast);
   }
   
@@ -43,8 +57,3 @@
 .container > mat-toolbar{
   z-index: 2;
 }
-
-.layout-icon{
-  margin-left: auto;
-}
-

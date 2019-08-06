@@ -7,14 +7,17 @@
     <fa-icon [icon]="['fa','exclamation-triangle']" class="fa-7x"></fa-icon>
     {{(processingError| async)?.message}}
     <button mat-button class="retry-error" (click)="resetDropContainerOut()">
-      <fa-icon [icon]="['fa','redo-alt']"></fa-icon>
+      <fa-icon [icon]="['fa','redo']"></fa-icon>
       Reprocess File
     </button>
   </div>
 </div>
-<ng-container *ngIf="categories">
-  <panel-toolbar (expansion)="toggleExpansionOut($event)" (descriptions)="toggleDescriptionsOut($event)"></panel-toolbar>
-  <mat-list class="container-out" cdkDropList (cdkDropListDropped)="dropCat($event)">
+<ng-container *ngIf="categories && !(processingError | async)?.error">
+  <panel-toolbar 
+  (expansion)="toggleExpansionOut($event)" 
+  (descriptions)="toggleDescriptionsOut($event)"
+  (reset)="resetDropContainerOut()"></panel-toolbar>
+  <mat-list [id]="id" [cdkDropListConnectedTo]="linkTo.id" class="container-out" cdkDropList (cdkDropListDropped)="dropCat($event)">
     <div class="itemCat" *ngFor="let category of categories" cdkDrag >
       <div class="itemCat-placeholder" *cdkDragPlaceholder></div>
       <mat-expansion-panel #expansionPanel>  

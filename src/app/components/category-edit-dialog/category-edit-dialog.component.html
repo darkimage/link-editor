@@ -1,8 +1,9 @@
+<form [formGroup]="form">
 <h2>{{data.title}}</h2>
 <mat-form-field>
-  <input matInput placeholder="Name" [(ngModel)]="data.data.name">
+  <input matInput formControlName="name" placeholder="Name">
 </mat-form-field>
-<mat-tab-group class="description-form">
+<mat-tab-group class="description-form" (selectedTabChange)="updateDesc()">
   <mat-tab label="Edit description">
     <mat-form-field class="textarea-form">
       <textarea
@@ -10,12 +11,12 @@
       matInput
       cdkTextareaAutosize
       #autosize="cdkTextareaAutosize"
-      [(ngModel)]="data.data.description"></textarea>
+      formControlName="description"></textarea>
     </mat-form-field>
   </mat-tab>
   <mat-tab label="Preview">
     <div class="preview">
-      <markdown class="preview" [data]="data.data.description" ></markdown>
+      <markdown class="preview" [data]="previewDesc" ></markdown>
     </div>
   </mat-tab>
 </mat-tab-group>
@@ -23,3 +24,4 @@
   <ng-container *ngIf="data.mode === 'edit'">Close</ng-container>
   <ng-container *ngIf="data.mode === 'create'">Add</ng-container>
 </button>
+</form>

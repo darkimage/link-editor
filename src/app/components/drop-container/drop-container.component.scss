@@ -21,11 +21,11 @@
         transform: translateY(-50%);
         border-radius: $border-radius;
         border-width: 5px;
-        border-color: mat-color($primary,100);
+        border-color: mat-color($accent,100);
         border-style: dotted;
         padding: 5em 0;
         // margin-right: 16px;
-        background-color: mat-color($primary,50);
+        background-color: mat-color($accent,50);
     }
 
     .drop-container > #text{
@@ -47,7 +47,7 @@
         left: 50%;
         transform: translateX(-50%);
         transition: opacity 0.5s ease-out;
-        color: mat-color($primary)!important;
+        color: mat-color($accent)!important;
     }
 
     .drop-container #upload-icon{
@@ -94,10 +94,34 @@
         bottom: 16px;
         left: 16px;
         background: mat-color($accent);
-    }
-
-    .export-fab fab-icon{
         color: mat-color($accent,default-contrast);
     }
 }
 
+@mixin drop-container-dark-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+
+    .drop-container{
+        border-color: mat-color($accent, 700);
+        background-color: mat-color($mat-grey, 800);
+    }
+
+    .drop-container > #text{
+        color: mat-color($mat-grey, 500);
+    }
+
+    .drop-container fa-icon{
+        color: mat-color($accent);
+    }
+
+    .fixed-upload-icon{
+        color: mat-color($accent) !important;
+    }
+
+    .export-fab{
+        background: mat-color($accent);
+    }
+}

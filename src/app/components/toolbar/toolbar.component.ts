@@ -15,6 +15,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
   @ViewChild('toolbar', {static: true}) toolbar: ElementRef;
   expansionAll: ExpansionState = 'collapsed';
   descriptionAll: DescriptionState = 'hide';
+  @Output() reset: EventEmitter<void> =  new EventEmitter<void>();
   @Output() expansion: EventEmitter<ExpansionState> =  new EventEmitter<ExpansionState>();
   @Output() descriptions: EventEmitter<DescriptionState> =  new EventEmitter<DescriptionState>();
   constructor(
@@ -42,5 +43,9 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
       this.descriptionAll = 'hide';
     }
     this.descriptions.emit(this.descriptionAll);
+  }
+
+  resetDrop() {
+    this.reset.emit();
   }
 }
