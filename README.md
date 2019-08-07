@@ -14,7 +14,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-The only needed software is (NodeJS)[https://nodejs.org/en/]
+The only needed software is [NodeJS](https://nodejs.org/en/)
 
 ### Installing
 
