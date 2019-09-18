@@ -27,7 +27,7 @@ export class JekyllOutputStrategy implements OutputParsingStrategy {
                 const currCat = new ItemCategory(match.groups.name, match.groups.description);
                 categoriesArray.push(currCat);
                 const itemReg = new RegExp(
-                    /class=".*?btn--(?<style>.+?)(?="|\s).*?>(?<difficulty>.+?)<\/a.*?\[(?<name>.+?)\]\[(?<link>.+?)\]<br>(?<description>.*?)(?=(?:<a|%end%))/,
+                    /class=".*?(?:btn--(?<style>.+?))*?">(?<difficulty>.+?)<\/a.*?\[(?<name>.+?)\]\[(?<link>.+?)\]<br>(?<description>.*?)(?=(?:<a|%end%))/,
                 'gms');
                 const items = new Array<ItemData>();
                 const itemString = match.groups.items + '\n %end%';
