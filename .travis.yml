@@ -21,3 +21,5 @@ script:
   - npm run test
   - npm run e2e
   - npm run build
+  - npm run electron:windows
+  - npm run electron:linux
