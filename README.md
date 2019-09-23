@@ -1,4 +1,4 @@
-# WL Link Editor ![travici](https://travis-ci.org/darkimage/wl-link-editor.svg?branch=master)
+# WL Link Editor [![travici](https://travis-ci.org/darkimage/wl-link-editor.svg?branch=master)](https://travis-ci.org/darkimage/wl-link-editor)
 
 Simple program to organize a collection of links
 
